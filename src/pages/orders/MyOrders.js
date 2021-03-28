@@ -118,6 +118,12 @@ export default function MyOrders() {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
+                      Product Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
                       Order Name
                     </th>
                     <th
@@ -171,8 +177,14 @@ export default function MyOrders() {
                             <td>
                               <div class="ml-4">
                                 <img class="text-sm font-medium text-gray-900 h-20 w-20" src={x.prim_path}>
-                                  
                                 </img>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">
+                                {x.prod_name}
+                                </div>
                               </div>
                             </td>
                             <td>
