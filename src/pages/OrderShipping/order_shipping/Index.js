@@ -1,7 +1,7 @@
 import { data } from 'autoprefixer';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { apiOrder } from '../../../config/apiUrl'
+import { apiOrder, apiShipping } from '../../../config/apiUrl'
 import ModalOship from './OshipModal'
 import ModalOshipVal from './OshipvalModal'
 import numberWithCommas from '../../Expeditions/expedition_routes/numberWithCommas'
@@ -56,7 +56,7 @@ function Index() {
 
     const fetchFilterOrders = async ()=>{
         return await axios({
-            url:`http://localhost:3006/api/order_filter/1031/${stat}`,
+            url:`${apiShipping}/order_filter/1031/${stat}`,
             method: "get",
             headers: {
                 "Content-Type": "application/json"
@@ -72,7 +72,7 @@ function Index() {
 
     const fetchSearchOrders = async ()=>{
         return await axios({
-            url:`http://localhost:3006/api/order_search/${search}`,
+            url:`${apiShipping}/order_search/${search}`,
             method: "get",
             headers: {
                 "Content-Type": "application/json"
@@ -89,7 +89,7 @@ function Index() {
 
     const fetchOrderDikirim = async ()=>{
         return await axios({
-            url: `http://localhost:3006/api/orders/${localStorage.getItem('dataAccountId')}/shipping`,
+            url: `${apiShipping}/orders/${localStorage.getItem('dataAccountId')}/shipping`,
             method: "get",
             headers: {
                 "Content-Type": "application/json"
@@ -109,7 +109,7 @@ function Index() {
 
     const fetchOrderTelahSampai = async ()=>{
         return await axios({
-            url: `http://localhost:3006/api/orders/${localStorage.getItem('dataAccountId')}/arrived`,
+            url: `${apiShipping}/orders/${localStorage.getItem('dataAccountId')}/arrived`,
             method: "get",
             headers: {
                 "Content-Type": "application/json"
@@ -129,7 +129,7 @@ function Index() {
 
     const fetchOrderSelesai = async ()=>{
         return await axios({
-            url: `http://localhost:3006/api/orders/${localStorage.getItem('dataAccountId')}/closed`,
+            url: `${apiShipping}/orders/${localStorage.getItem('dataAccountId')}/closed`,
             method: "get",
             headers: {
                 "Content-Type": "application/json"

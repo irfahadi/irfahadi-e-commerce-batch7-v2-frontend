@@ -11,14 +11,14 @@ export default function MyOrders() {
   let [modal, setModal] = useState(false);
   let [dataFormOrderArrival, setDataFormArrival] = useState({});
   const [MyOrders, setMyOrders] = useState();
-  const [stat, setStat] = useState();
+  let [status, setStatus] = useState();
   const [accId, setaccId] = useState(localStorage.getItem("dataAccountId"));
  
 
   useEffect(() => {
     // fetchMyOrders();
     fetchFilterOrders();
-  }, [modal, dataFormOrderArrival, stat]);
+  }, [modal, dataFormOrderArrival, status]);
 
   const fetchMyOrders = async () => {
     let res = await axios({
@@ -44,7 +44,7 @@ export default function MyOrders() {
 
   const fetchFilterOrders = async () => {
     let res = await axios({
-      url: `http://localhost:3004/api/v1/orders/${accId}/${stat}`,
+      url: `http://localhost:3004/api/v1/orders/${accId}/${status}`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -76,8 +76,7 @@ export default function MyOrders() {
 
   const onFilter = (e) => {
     const value = e.target.options[e.target.selectedIndex].value;
-    setStat(value);
-    console.log(value);
+    setStatus(value);
   };
 
   return (
@@ -95,10 +94,12 @@ export default function MyOrders() {
             class="mt-1 block w-1/6 mb-4 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
             <option>Pilih</option>
+            <option value="CHECKOUT">CHECKOUT</option>
             <option value="PAID">PAID</option>
             <option value="SHIPPING">SHIPPING</option>
             <option value="ARRIVED"> ARRIVED</option>
             <option value="CLOSED"> CLOSED</option>
+            <option value="CANCELLED"> CANCEL</option>
           </select>
           {/* <button><ModalMySaldo/></button> */}
         </div>
@@ -167,10 +168,12 @@ export default function MyOrders() {
                 <tbody class="bg-white divide-y divide-gray-200">
                 {MyOrders ? MyOrders.filter(
                         (x) =>
+                          x.order_stat_name === "CHECKOUT"||
                           x.order_stat_name === "PAID"||
                           x.order_stat_name === "SHIPPING"||
                           x.order_stat_name === "ARRIVED"||
-                          x.order_stat_name === "CLOSED"
+                          x.order_stat_name === "CLOSED" ||
+                          x.order_stat_name === "CANCELLED"
                       ).map((x) => (
                         <>
                           <tr>
@@ -258,6 +261,7 @@ export default function MyOrders() {
                                   Finish
                                 </button>
                               </td>
+                              
                             )}
                           </tr>
                         </>
