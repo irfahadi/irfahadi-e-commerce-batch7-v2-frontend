@@ -113,6 +113,7 @@ const OrdersKw = () => {
                 <p>{data.total_amount}</p>
                 <p>{data.transaction_type}</p>
                 <p>{data.order_name}</p>
+                
                 <select value={paymentBy} onChange={onChangePayment}>
                     <option>Select Payment Option</option>
                     <option value="wallet">Wallet</option>

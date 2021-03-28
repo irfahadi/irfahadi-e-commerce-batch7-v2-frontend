@@ -54,7 +54,7 @@ const UpdateBankAccount = (bankAccount) => {
 
 const DeleteBankAccount = async (bacc_id) => {
   const deleteBankAccount = bankAccountApi+"/"+bacc_id
-  let result = await axios.delete(deleteBankAccount,{bacc_id})
+  let result = await axios.delete(deleteBankAccount)
   console.log(result.data.toString());
   return result.data.toString();
 }

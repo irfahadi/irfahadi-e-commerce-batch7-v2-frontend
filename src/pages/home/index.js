@@ -141,6 +141,7 @@ export default function Navbar({ fixed }) {
 							{
 								Product.map((prod) => {
 									return (
+									prod.prod_stock < 1 ? null :  
 										<>
 											<div key={prod.prod_id} class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
 										<Link onClick={()=> DetailProduct(prod.prod_id, prod.product_images[0].prim_id)}>

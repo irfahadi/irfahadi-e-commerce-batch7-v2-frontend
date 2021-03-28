@@ -60,8 +60,7 @@ console.log(dataFormOrderShipping.account.addresses[0].addr_address)
         .then(result=>{
             if(result){
                 console.log(result.data) 
-                notify()
-            history.push('/ordershipping') 
+               
             }
             
             console.log(result.data)
@@ -100,6 +99,8 @@ console.log(dataFormOrderShipping.account.addresses[0].addr_address)
             await handleUpdate();
             await klikShipping();
             setModal(false)
+            notify()
+            history.push('/ordershipping') 
 
            } catch (err) {
                console.log(err.message) 

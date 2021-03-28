@@ -95,7 +95,7 @@ const MyWallet = () => {
 
     return (
       <>
-      <div className="bg-secondary border border-primary font-sans ml-2 mt-2 h-36 flex-wrap shadow-lg rounded-lg text-text_primary font-light pl-2">
+      <div className="bg-white border border-primary font-sans ml-2 mt-2 h-36 flex-wrap shadow-lg rounded-lg text-text_primary font-light pl-2">
           <h4 className=" font-medium ml-2 pt-2">My Wallet</h4>
           {
             walletActivated ? (

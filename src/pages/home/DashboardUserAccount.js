@@ -27,7 +27,7 @@ import Address from "../address/address";
 
 import Profil2 from "../userAccount/profil2";
 import Address2 from "../address/address2";
-import MyWallet from "../payment/MyWallet";
+import MyWallet from "../payment/WalletAndBank";
 const axios = require("axios");
 
 // const progress = 50;

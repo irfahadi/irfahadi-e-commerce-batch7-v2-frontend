@@ -33,9 +33,15 @@ const BankAccount = () => {
   };
 
   const onDelete = async (x) => {
-    await DeleteBankAccount(x.target.value);
-    setRefresh(!refresh);
-  };
+    console.log(x.target.value)
+    try {
+      await DeleteBankAccount(x.target.value)
+      setRefresh(!refresh)      
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 
   const onCreateBankAccount = async () => {
     if (editForm) {
@@ -63,10 +69,10 @@ const BankAccount = () => {
 
   return (
     <>
-      <div className="grid max-w-full mx-auto mt-10 text-center border border-primary rounded-md overflow-hidden text-text_primary">
+      <div className="grid max-w-full mx-auto text-center border border-primary rounded-md overflow-hidden text-white">
         <table>
           <thead>
-            <tr className="bg-table">
+            <tr className="bg-primary ">
               <th className="w-1/4 font-extralight">Bank</th>
               <th className="w-1/4 font-extralight" >Pemilik</th>
               <th className="w-1/4 font-extralight">No Rek</th>
@@ -80,16 +86,16 @@ const BankAccount = () => {
                 :
                 bankAccount.map((x) => {
                   return (
-                    <tr className="text-text_primary" key={x.bacc_id}>
+                    <tr className="text-black" key={x.bacc_id}>
                       <td>{x.bank.bank_name}</td>
                       <td>{x.bacc_owner}</td>
                       <td>{x.bacc_acc_number}</td>
                       <td>
-                        <button defaultValue={x.bacc_id} value={x.bacc_id}>
-                          <img className="w-8 h-8" src="delete-icon.png" onClick={onDelete}/>
+                        <button value={x.bacc_id} className="mx-2 outline-none w-3/12 h-2/6 bg-primary text-white rounded-md" onClick={onDelete}>
+                          Delete
                         </button>
-                        <button defaultValue={x.bacc_id} onClick={onEdit} className=" outline-none">
-                          <img className="w-7 h-7 mx-2" src="modify-icon.png" />
+                        <button value={x.bacc_id} onClick={onEdit} className="outline-none w-3/12 h-2/6 bg-primary rounded-md text-white">
+                          Edit
                         </button>
                       </td>
                     </tr>
@@ -100,7 +106,7 @@ const BankAccount = () => {
         </table>
       </div>
 
-      <button onClick={() => { setModal(true) }} className=" font-medium max-w-lg px-3 p-1 bg-button rounded-lg mt-2 text-text_primary">Add Bank Account</button>
+      <button onClick={() => { setModal(true) }} className=" focus:border-primary focus:outline-white font-medium max-w-lg px-3 p-1 bg-primary rounded-lg mt-2 text-white">Add Bank Account</button>
       {
         modal ?
           <AddBankAccountModal

@@ -3,6 +3,10 @@ import Footer from './components/footer/index';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Home from './pages/home/index'
 import Shop from './pages/home/Dashboard'
+// import CategoryProd from './pages/home/productCate'
+import PageNotFound from './pages/PageNotFound'
+import Category from './pages/category/category'
+import Condition from './pages/condition/condition'
 import Cart from './pages/cart'
 import Orders from './pages/orders/Orders'
 import Daftar from './pages/users/Daftar'
@@ -45,10 +49,8 @@ import WalletAndBank from './pages/payment/WalletAndBank'
 import Brand from './pages/brand/brand';
 import AddBrand from './pages/brand/addBrand';
 import {EditBrand} from './pages/brand/editBrand';
-import Condition from './pages/condition/condition';
 import addCond from './pages/condition/addCond';
 import {EditCond} from './pages/condition/editCond';
-import Category from './pages/category/category';
 import addCate from './pages/category/addCate';
 import CateUpload from './pages/category/cateUpload';
 
@@ -115,8 +117,7 @@ function App() {
           <Route path="/transactions/:acco_id" component={Transaction}/>
           <Route path="/order-kw" component={OrdersKw}/>
           <Route path="/wallet-bank" component={WalletAndBank}/>
-          <Route component={ <div>Page Not Found</div>}/>
-          {/* <Route path="/order-kw" component={OrdersKw}/> */}
+          <Route component={PageNotFound}/>
         </Switch>
       </div>
       <Footer></Footer>

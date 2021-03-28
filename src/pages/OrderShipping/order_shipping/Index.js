@@ -3,7 +3,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { apiOrder } from '../../../config/apiUrl'
 import ModalOship from './OshipModal'
+import ModalOshipVal from './OshipvalModal'
 import numberWithCommas from '../../Expeditions/expedition_routes/numberWithCommas'
+import OrderDikirimModal from './OrderDikirimModal';
+import OrderSampaiModal from './OrderSampaiModal';
+import OrderSelesaiModal from './OrderSelesaiModal'
+import { method } from 'lodash-es';
+import OshipvalModal from './OshipvalModal';
 
 function Index() {
 
@@ -11,20 +17,136 @@ function Index() {
     let [updateOrderShipping, setUpdateOrderShipping] = useState()
     // let [orderName, setOrderName] = useState("")
     let [modal, setModal] = useState(false);
-    let [dataFormOrderShipping, setDataFormOrderShipping] = useState("")
-    // let [dataEditRow] = useState(null)
+    let [modalShipping, SetModalShipping]= useState(false);
+    let [orderDikirim, setOrderDikirim]= useState([]);
+    let [orderTelahSampai, setOrderTelahSampai] = useState([]);
+    let [orderSelesai, setOrderSelesai] = useState([]);
+    let [filterOrder, setFilterOrder] = useState([]);
+    let [modalOrderDikirm, setModalOrderDikirim] = useState(false);
+    let [modalOrderSampai, setModalOrderSampai] = useState(false);
+    let [modalOrderSelesai, setModalOrderSelesai]= useState(false);
+    let [dataFormOrderShipping, setDataFormOrderShipping] = useState("");
+    // let [dataEditRow] = useState(null);
+    let [stat, setStat]= useState();
+    let [search, setSearch] = useState('');
 
 
-    useEffect(() => {
+     useEffect(() => {
         fetchOrderShipping()
+        fetchOrderDikirim()
+        fetchOrderTelahSampai()
+        fetchOrderSelesai()
+        fetchFilterOrders()
+        fetchSearchOrders()
+        
         // fetchUpdateOrderShipping()
-    }, [modal, dataFormOrderShipping])
+    }, [modal, dataFormOrderShipping,stat, modalShipping, search]) 
 
 
-    console.log(localStorage.getItem('dataAccountId'))
+    /* useEffect(() => {
+        fetchJumlahOrder()
+        // fetchUpdateOrderShipping()
+    }, []) */
+// console.log("storage")
+//     console.log(localStorage.getItem('dataAccountId'))
 
     // console.log("Naha")
     //     console.log(OrderShipping.map(x => x.order_acco_id_seller))    
+
+    const fetchFilterOrders = async ()=>{
+        return await axios({
+            url:`http://localhost:3006/api/order_filter/1031/${stat}`,
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then((res)=>{
+            setFilterOrder(res.data)
+        }).catch((err)=> console.error(err));
+    }    
+
+    console.log(filterOrder)
+
+
+
+    const fetchSearchOrders = async ()=>{
+        return await axios({
+            url:`http://localhost:3006/api/order_search/${search}`,
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then((res)=>{
+            setSearch(res.data)
+        }).catch((err)=> console.error(err));
+    }    
+
+    console.log(filterOrder)
+
+
+
+
+    const fetchOrderDikirim = async ()=>{
+        return await axios({
+            url: `http://localhost:3006/api/orders/${localStorage.getItem('dataAccountId')}/shipping`,
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then((res)=>{
+            
+            // console.log(res.data)
+            setOrderDikirim(res.data)
+            // console.log("fetchjumlah order :")
+            //console.log({orderDikirim.order_dikirim})
+           
+        })            
+        .catch((err) => console.error(err));
+
+    }
+
+
+    const fetchOrderTelahSampai = async ()=>{
+        return await axios({
+            url: `http://localhost:3006/api/orders/${localStorage.getItem('dataAccountId')}/arrived`,
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then((res)=>{
+            
+            // console.log(res.data)
+            setOrderTelahSampai(res.data)
+            // console.log("fetchjumlah order :")
+            //console.log({orderDikirim.order_dikirim})
+           
+        })            
+        .catch((err) => console.error(err));
+
+    }
+
+
+    const fetchOrderSelesai = async ()=>{
+        return await axios({
+            url: `http://localhost:3006/api/orders/${localStorage.getItem('dataAccountId')}/closed`,
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then((res)=>{
+            
+            // console.log(res.data)
+            setOrderSelesai(res.data)
+            // console.log("fetchjumlah order :")
+            //console.log({orderDikirim.order_dikirim})
+           
+        })            
+        .catch((err) => console.error(err));
+
+    }
+    //console.log(orderDikirim[0].order_dikirim);
+    //console.log("hasil y: ")
+
 
     const fetchOrderShipping = async () => {
         return await axios({
@@ -41,9 +163,9 @@ function Index() {
                     res.data[y].order_created_on = ordersDate;
                 });
                 setOrderShipping(res.data)
-                console.log(res.data);
-                console.log(res);
-                console.log();
+                // console.log(res.data);
+                // console.log(res);
+                // console.log();
             })
             .catch((err) => console.error(err));
 
@@ -53,33 +175,130 @@ function Index() {
 
     const onEditRow = (e) => {
         console.log(e.target.value)
-        // OrderShipping.map((data)=>{
-        //     if(data.order_name === e.target.value){
-        //         setDataFormOrderShipping(data)
-
-        //     }
-        //     return setDataFormOrderShipping(data)
-        // }
-        // )
-
-
-
         OrderShipping.filter((data) =>
             data.order_name === e.target.value
         ).map(data => setDataFormOrderShipping(data))
 
-
-
-
         setModal(true)
     }
+
+
+
+    const onEditRowShipping = (e) => {
+        console.log(e.target.value)
+        OrderShipping.filter((data) =>
+            data.order_name === e.target.value
+        ).map(data => setDataFormOrderShipping(data))
+
+        SetModalShipping(true)
+    }
+
+
+
+
+
+
+    const onFilter = (e)=>{
+        const value = e.target.options[e.target.selectedIndex].value;
+        setStat(value)
+    }
+
+    const onSearch = (e)=>{
+       const value = e.target.value;
+       setSearch(value)
+    }
+
+
+
+    const onModalOrderDikirim = ()=> {
+        setModalOrderDikirim(true)
+    } 
+
+    const onModalOrderSampai = ()=> {
+        setModalOrderSampai(true)
+    } 
+
+
+    const onModalOrderSelesai = ()=> {
+        setModalOrderSelesai(true)
+    } 
     // console.log(localStorage.getItem('dataAccountId'))
 
-    console.log(OrderShipping)
+    // let OrderDikirim = async () =>{
+    //    let jumlah =await OrderShipping.length
+
+    //  return SetOrderDikirim(jumlah)
+    // }
+
+    // console.log(OrderDikirim())
+    // console.log("ini isi")
+    // console.log(OrderShipping)
 
 
     return (
         <div>
+            <div class="mt-3 flex flex-wrap justify-center " >
+				<div class="mx-5 my-2   bg-blue-400 rounded-md shadow-md overflow-hidden" onClick={onModalOrderDikirim}>
+				{/* <Link onClick={()=> DetailProduct(prod.prod_id, prod.product_images[0].prim_id)}> */}
+					<div class="px-5 py-3">
+						<h3 class="text-white text-l ">Order Dikirim </h3>
+						<span class="flex justify-center text-white text-2xl">{
+                             orderDikirim.map(x=>{
+                                return (x.order_dikirim)
+                            })
+                        }</span>
+					</div>
+				{/* </Link> */}
+				</div>
+                <div class="mx-5 my-2   bg-blue-400 rounded-md shadow-md overflow-hidden" onClick={onModalOrderSampai}>
+				{/* <Link onClick={()=> DetailProduct(prod.prod_id, prod.product_images[0].prim_id)}> */}
+					<div class="px-5 py-3">
+						<h3 class="text-white text-l ">Order Telah Sampai </h3>
+						<span class="flex justify-center text-white text-2xl ">{
+                             orderTelahSampai.map(x=>{
+                                return (x.order_dikirim)
+                            })
+                        }</span>
+					</div>
+				{/* </Link> */}
+				</div>
+                <div class="mx-5 my-2   bg-blue-400 rounded-md shadow-md overflow-hidden" onClick={onModalOrderSelesai}>
+				{/* <Link onClick={()=> DetailProduct(prod.prod_id, prod.product_images[0].prim_id)}> */}
+					<div class="px-5 py-3">
+						<h3 class="text-white text-l">Order Selesai </h3>
+						<span class="flex justify-center text-white text-2xl ">{
+                             orderSelesai.map(x=>{
+                                return (x.order_dikirim)
+                            })
+                        }</span>
+					</div>
+				{/* </Link> */}
+				</div>
+							
+			</div>
+
+            <div className="flex md:mt-3 px-1 mx-5">
+                <div class="relative">
+                  <div class="absolute top-4 left-3 "> <i class="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
+                  <input type="search" class="h-14 w-96 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none border-bg-primary"
+                    placeholder="Search anything..."
+                    onChange= {onSearch}
+                  >
+                  </input>
+                </div>
+                <select
+            name="status"
+            onChange={onFilter}
+             className="mt-1 block py-2 px-3 mx-5 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <option>Filter Status Order...</option>
+                <option value="PAID">Paid</option>
+                <option value="SHIPPING">Shipping</option>
+                <option value="ARRIVED">Arrived</option>
+                <option value="CLOSED">Closed</option>
+                          
+            </select>
+            </div>
+            
             <div class="flex flex-wrap">
                 <div class="-my-2 p-8 overflow-x-auto">
                     <div class="py-2 align-middle inline-block max-w-full">
@@ -112,8 +331,19 @@ function Index() {
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 {
-                                    OrderShipping.length > 0 ?
-                                        OrderShipping.filter((x) => x.status.stat_name === "PAID" && x.order_acco_id_seller == localStorage.getItem('dataAccountId')).map(x => {
+                                    // OrderShipping.length > 0 ?
+                                    //     OrderShipping.filter((x) => x.order_stat_name === "PAID" && x.order_acco_id_seller == localStorage.getItem('dataAccountId'))
+                                    //     .filter(x => {
+                                    //         if (search === ""){
+                                    //             return x;
+                                    //         } else if (x.order_name.toLowerCase().includes(search.toLocaleLowerCase())){
+                                    //             return x;
+                                    //         }
+                                    //     })
+                                    // OrderShipping.length >0 ?
+                                    //     OrderShipping.map((x) => {
+                                            filterOrder.length >0 ?
+                                            filterOrder.map((x) => {
                                             return( <tr key={x.order_name}>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {x.order_name}
@@ -123,6 +353,7 @@ function Index() {
                                                 </td>
                                                 <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                                                     Rp. {numberWithCommas(x.order_subtotal)}
+                                                    {/* {x.order_subtotal} */}
                                                 </td>
                                                 <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                                                     {x.order_weight} Kg
@@ -137,14 +368,25 @@ function Index() {
                                                         {x.order_stat_name}
                                                     </span>
                                                 </td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                                                    <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRow} value={x.order_name}>SHIPPING</button>
-                                                </td>
+                                                {
+                                                    (x.order_stat_name === "PAID") ?
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                            <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRow} value={x.order_name}>SHIPPING</button>
+                                                        </td>
+                                                    : (x.order_stat_name === "SHIPPING") ?
+                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                    <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRowShipping} value={x.order_name}>ARRIVED</button>
+                                                    </td>
+                                                    :
+                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-400">
+                                                    <button className="py-2 px-4 bg-gray-400 text-white reounded" onClick={()=>{setModal(true)}} disabled="true"> &nbsp; FINISH &nbsp;</button>
+                                                    </td>
+                                                }
                                             </tr>)
                                         })
                                         :
                                         <tr>
-                                            <td colSpan={3}>No Records Found.</td>
+                                            <td>No Records Found.</td>
                                         </tr>
                                 }
 
@@ -155,17 +397,54 @@ function Index() {
                 </div>
             </div>
             {
-                modal ?
+                (modal) ?
                     <ModalOship
                         setModal={setModal}
                         OrderShipping={OrderShipping}
                         dataFormOrderShipping={dataFormOrderShipping}
-                    // updateOrderShipping={updateOrderShipping}
-                    // setUpdateOrderShipping={setUpdateOrderShipping}
-                    // OrderShipping={OrderShipping}
-                    // setOrderShipping={setOrderShipping}
-                    // order = {onEditRow}
                     />
+                    
+                    :
+                    null
+            }
+            {
+                (modalShipping) ?
+                    <OshipvalModal
+                        SetModalShipping={SetModalShipping}
+                        OrderShipping={OrderShipping}
+                        dataFormOrderShipping={dataFormOrderShipping}
+                    />
+                    
+                    :
+                    null
+            }
+            {
+                (modalOrderDikirm) ?
+                    <OrderDikirimModal
+                    setModalOrderDikirim={setModalOrderDikirim}
+                    OrderShipping={OrderShipping}
+                    />
+                    
+                    :
+                    null
+            }
+            {
+                (modalOrderSampai) ?
+                    <OrderSampaiModal
+                    setModalOrderSampai={setModalOrderSampai}
+                    OrderShipping={OrderShipping}
+                    />
+                    
+                    :
+                    null
+            }
+            {
+                (modalOrderSelesai) ?
+                    <OrderSelesaiModal
+                    setModalOrderSelesai={setModalOrderSelesai}
+                    OrderShipping={OrderShipping}
+                    />
+                    
                     :
                     null
             }

@@ -187,7 +187,7 @@ export default function EditProduct(props) {
                 setProva_id2(listProduct.product_variants[1].prova_id)
                 setProvaNameSize(listProduct.product_variants[1].prova_name)
                 setProvaOptionSize(listProduct.product_variants[1].prova_option)
-                setPrim_id(listProduct.product_images[0].prim_id)
+                setPrim_id(listProduct.product_images[0]?.prim_id)
 
             }
         };
