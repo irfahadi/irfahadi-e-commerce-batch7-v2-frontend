@@ -29,6 +29,7 @@ function Index() {
     // let [dataEditRow] = useState(null);
     let [stat, setStat]= useState();
     let [search, setSearch] = useState('');
+    let [filter, setFilter] = useState(false)
 
 
      useEffect(() => {
@@ -40,7 +41,7 @@ function Index() {
         fetchSearchOrders()
         
         // fetchUpdateOrderShipping()
-    }, [modal, dataFormOrderShipping,stat, modalShipping, search]) 
+    }, [modal, dataFormOrderShipping,stat, modalShipping]) 
 
 
     /* useEffect(() => {
@@ -81,7 +82,7 @@ function Index() {
         }).catch((err)=> console.error(err));
     }    
 
-    console.log(filterOrder)
+    console.log(search)
 
 
 
@@ -201,11 +202,16 @@ function Index() {
     const onFilter = (e)=>{
         const value = e.target.options[e.target.selectedIndex].value;
         setStat(value)
+        console.log('onfiter :'+value)
+        setFilter(true)
+
     }
 
     const onSearch = (e)=>{
        const value = e.target.value;
        setSearch(value)
+       setFilter(false)
+
     }
 
 
@@ -234,7 +240,7 @@ function Index() {
     // console.log("ini isi")
     // console.log(OrderShipping)
 
-
+    console.log(orderDikirim)
     return (
         <div>
             <div class="mt-3 flex flex-wrap justify-center " >
@@ -342,8 +348,15 @@ function Index() {
                                     //     })
                                     // OrderShipping.length >0 ?
                                     //     OrderShipping.map((x) => {
-                                            filterOrder.length >0 ?
-                                            filterOrder.map((x) => {
+                                            // filterOrder.length >0 ?
+                                            // filterOrder.map((x) => {
+                                            filter===false ? (OrderShipping.filter((val)=>{
+                                                    if(search == ""){
+                                                        return val
+                                                    } else if (val.order_name.toLowerCase().includes(search.toLocaleLowerCase())){
+                                                        return val
+                                                    } 
+                                                }).map((x)=>{
                                             return( <tr key={x.order_name}>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {x.order_name}
@@ -383,11 +396,51 @@ function Index() {
                                                     </td>
                                                 }
                                             </tr>)
-                                        })
-                                        :
-                                        <tr>
-                                            <td>No Records Found.</td>
-                                        </tr>
+                                        })) : (filterOrder.map((x)=>{
+                                            return( <tr key={x.order_name}>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {x.order_name}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {x.order_created_on}
+                                                </td>
+                                                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
+                                                    Rp. {numberWithCommas(x.order_subtotal)}
+                                                    {/* {x.order_subtotal} */}
+                                                </td>
+                                                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
+                                                    {x.order_weight} Kg
+                                                        </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {x.order_discount} %
+                                                            {/* {x.order_acco_id_seller} */}
+                                                    {/* {x.orders_line_items[2].product.prod_acco_id} */}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                        {x.order_stat_name}
+                                                    </span>
+                                                </td>
+                                                {
+                                                    (x.order_stat_name === "PAID") ?
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                            <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRow} value={x.order_name}>SHIPPING</button>
+                                                        </td>
+                                                    : (x.order_stat_name === "SHIPPING") ?
+                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                    <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRowShipping} value={x.order_name}>ARRIVED</button>
+                                                    </td>
+                                                    :
+                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-400">
+                                                    <button className="py-2 px-4 bg-gray-400 text-white reounded" onClick={()=>{setModal(true)}} disabled="true"> &nbsp; FINISH &nbsp;</button>
+                                                    </td>
+                                                }
+                                            </tr>)
+                                        }))
+                                        // :
+                                        // <tr>
+                                        //     <td>No Records Found.</td>
+                                        // </tr>
                                 }
 
 
