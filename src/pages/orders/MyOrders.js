@@ -10,10 +10,10 @@ export default function MyOrders() {
   let history = useHistory();
   let [modal, setModal] = useState(false);
   let [dataFormOrderArrival, setDataFormArrival] = useState({});
-  const [MyOrders, setMyOrders] = useState();
   let [status, setStatus] = useState();
+  let [filter, setFilter] = useState(false);
+  const [MyOrders, setMyOrders] = useState();
   const [accId, setaccId] = useState(localStorage.getItem("dataAccountId"));
- 
 
   useEffect(() => {
     // fetchMyOrders();
@@ -64,9 +64,7 @@ export default function MyOrders() {
       .catch((err) => console.error(err));
   };
 
-
   const onEditRow = (e) => {
-
     MyOrders.filter((data) => data.order_name === e.target.value).map((data) =>
       setDataFormArrival(data)
     );
@@ -89,6 +87,7 @@ export default function MyOrders() {
           <select
             id="status"
             name="status"
+            value={status}
             autocomplete="status"
             onChange={onFilter}
             class="mt-1 block w-1/6 mb-4 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -166,110 +165,107 @@ export default function MyOrders() {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                {MyOrders ? MyOrders.filter(
-                        (x) =>
-                          x.order_stat_name === "CHECKOUT"||
-                          x.order_stat_name === "PAID"||
-                          x.order_stat_name === "SHIPPING"||
-                          x.order_stat_name === "ARRIVED"||
-                          x.order_stat_name === "CLOSED" ||
-                          x.order_stat_name === "CANCELLED"
-                      ).map((x) => (
-                        <>
-                          <tr>
-                            <td>
-                              <div class="ml-4">
-                                <img class="text-sm font-medium text-gray-900 h-20 w-20" src={x.prim_path}>
-                                </img>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">
-                                {x.prod_name}
+                  {
+                    MyOrders
+                      ? MyOrders.filter(
+                          (x) => x.order_stat_name === status
+                        ).map((x) => (
+                          <>
+                            <tr>
+                              <td>
+                                <div class="ml-4">
+                                  <img
+                                    class="text-sm font-medium text-gray-900 h-20 w-20"
+                                    src={x.prim_path}
+                                  ></img>
                                 </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">
-                                  {x.order_name}
+                              </td>
+                              <td>
+                                <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">
+                                    {x.prod_name}
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">
-                                  {x.order_created_on}
+                              </td>
+                              <td>
+                                <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">
+                                    {x.order_name}
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">
-                                  Rp.{numberWithCommas(x.order_total_due)}
+                              </td>
+                              <td>
+                                <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">
+                                    {x.order_created_on}
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">
-                                  {x.order_weight} kg
+                              </td>
+                              <td>
+                                <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">
+                                    Rp.{numberWithCommas(x.order_total_due)}
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            {/* <td>
+                              </td>
+                              <td>
+                                <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">
+                                    {x.order_weight} kg
+                                  </div>
+                                </div>
+                              </td>
+                              {/* <td>
                               <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-900">
                                   {x.order_watr_numbers}
                                 </div>
                               </div>
                             </td> */}
-                            <td>
-                              <div class="ml-4">
-                                <span class="text-sm font-medium bg-green-100 text-green-800 rounded-lg">
-                                  {x.order_stat_name}
-                                </span>
-                              </div>
-                            </td>
-
-                            {x.order_stat_name === "ARRIVED" ? (
                               <td>
                                 <div class="ml-4">
-                                  <button
-                                    value={x.order_name}
-                                    class="bg-button hover:bg-green-300 focus:outline-none cursor-pointer text-white transition duration-200 font-sans-serif py-2 px-8 rounded-lg"
-                                    onClick={onEditRow}
-                                  >
-                                    Diterima
-                                  </button>
+                                  <span class="text-sm font-medium bg-green-100 text-green-800 rounded-lg">
+                                    {x.order_stat_name}
+                                  </span>
                                 </div>
                               </td>
-                            ) : (
-                              <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                                <button
-                                  className="py-2 px-4 bg-gray-500 text-white reounded-lg w-100"
-                                  onClick={() => {
-                                    setModal(true);
-                                  }}
-                                  disabled="true"
-                                  onClick={() => {
-                                    setModal(true);
-                                  }}
-                                  disabled="true"
-                                >
-                                  Finish
-                                </button>
-                              </td>
-                              
-                            )}
-                          </tr>
-                        </>
-                      ))
-                    : null
-                  //   <tr>
-                  //   <td colSpan={3}>No Records Found.</td>
-                  // </tr>
+
+                              {x.order_stat_name === "ARRIVED" ? (
+                                <td>
+                                  <div class="ml-4">
+                                    <button
+                                      value={x.order_name}
+                                      class="bg-button hover:bg-green-300 focus:outline-none cursor-pointer text-white transition duration-200 font-sans-serif py-2 px-8 rounded-lg"
+                                      onClick={onEditRow}
+                                    >
+                                      Diterima
+                                    </button>
+                                  </div>
+                                </td>
+                              ) : (
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                  <button
+                                    className="py-2 px-4 bg-gray-500 text-white reounded-lg w-100"
+                                    onClick={() => {
+                                      setModal(true);
+                                    }}
+                                    disabled="true"
+                                    onClick={() => {
+                                      setModal(true);
+                                    }}
+                                    disabled="true"
+                                  >
+                                    Finish
+                                  </button>
+                                </td>
+                              )}
+                            </tr>
+                          </>
+                        ))
+                      : null
+                    //   <tr>
+                    //   <td colSpan={3}>No Records Found.</td>
+                    // </tr>
                   }
                 </tbody>
               </table>

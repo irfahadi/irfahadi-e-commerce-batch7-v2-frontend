@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 
 export default function CartOrders() {
   let history = useHistory();
+  const cart_id = localStorage.getItem("cart_id")
   const [CartOrders, setCartOrders] = useState([]);
   const [accId, setaccId] = useState(localStorage.getItem("dataAccountId"));
   const [accIdProd, setaccIdProd] = useState([]);
@@ -63,7 +64,7 @@ export default function CartOrders() {
     order_name: "#",
     payment_by: "wallet",
   });
-  let [watrNumber, setWatrNumber] = useState();
+  let [watrNumbers, setWatrNumbers] = useState();
 
   toast.configure();
   const notify = () => {
@@ -162,7 +163,7 @@ export default function CartOrders() {
 
   const fetchCartOrders = async () => {
     return await axios({
-      url: `${apiCart}/cart/${accId}/CHECKOUT`,
+      url: `${apiCart}/cart/${accId}/CHECKOUT/${cart_id}`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -284,6 +285,7 @@ export default function CartOrders() {
       );
       console.log(orders);
       createOrders(orders);
+      // setCartOrders([]);
     }
     // history.push('/orders')
   };
@@ -301,12 +303,12 @@ export default function CartOrders() {
   };
 
   useEffect(() => {
-    console.log(watrNumber);
-    axios.put("http://localhost:3004/api/orders", {
+    console.log(watrNumbers);
+    axios.put(`${apiOrder}/orders`, {
       order_name: data.order_name,
-      order_watr_numbers: watrNumber,
+      order_watr_numbers: watrNumbers,
     });
-  }, [watrNumber]);
+  }, [watrNumbers]);
 
   useEffect(() => {}, [selectedEkspedisi]);
 
@@ -337,7 +339,7 @@ export default function CartOrders() {
           setLoading={setLoading}
           setPaid={setPaid}
           data={data}
-          setWatrNumber={setWatrNumber}
+          setWatrNumbers={setWatrNumbers}
         />
       ) : paid ? (
         <div>

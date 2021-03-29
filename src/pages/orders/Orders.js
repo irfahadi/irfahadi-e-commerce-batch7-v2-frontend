@@ -33,7 +33,6 @@ export default function CartOrders() {
   const [prov, setProv] = useState([]);
   const [kec, setKec] = useState([]);
   const [kpos, setKpos] = useState([]);
-  const [citySeller, setCitySeller] = useState();
   const [cityTo, setCityTo] = useState([]);
   const [ongkir, setOngkir] = useState(0);
   const [weight, setWeight] = useState([]);
@@ -44,15 +43,11 @@ export default function CartOrders() {
   let [SubTotal, setSubtotal] = useState(0);
   let subTotalPajak = SubTotal + SubTotal * (10 / 100);
   let [less, setLess] = useState();
-  let [dataEkspedisi, setdataEkspedisi] = useState();
   let [counter, setCounter] = useState(0);
   let text = " . . . . . . . .".split("");
   let [loadingText, setLoadingText] = useState(text[0]);
   let [refresh, setRefresh] = useState(false);
-  let [showVerifyPin, setShowVerifyPin] = useState(false);
   let [loading, setLoading] = useState(false);
-  let [verified, setVerified] = useState(null);
-  let [paid, setPaid] = useState(false);
   let [data, setData] = useState({
     acco_id: accId,
     total_amount: 0,
@@ -84,8 +79,6 @@ export default function CartOrders() {
   useEffect(() => {
     fetchCartOrders();
     fetchAddress();
-    fetchExpedition();
-    fetchCitySeller();
     console.log(accId);
     console.log(SubTotal);
   }, []);
@@ -149,7 +142,7 @@ export default function CartOrders() {
 
   const fetchCartOrders = async () => {
     return await axios({
-      url: `${apiCart}/cart/${accId}/CHECKOUT`,
+      url: `${apiOrder}/orders/${accId}/PAID`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -170,7 +163,7 @@ export default function CartOrders() {
 
   const fetchAddress = async () => {
     let result = await axios({
-      url: `${apiUserAccount}/address/search/${accId}`,
+      url: `${apiUserAccount}/address/search/${accId}/PAID`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -182,114 +175,9 @@ export default function CartOrders() {
     setCityTo(result.data[0].city_name);
   };
 
-  const fetchAddressProd = async () => {
-    let result = await axios({
-      url: `${apiUserAccount}/address/search/${accId}`,
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    // console.log(result.data[0].acco_nama)
-    setAddress(result.data[0]);
-  };
-
-  const fetchExpedition = async () => {
-    let result = await axios({
-      url: `${apiExpedition}/expedition`,
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(result.data);
-    // console.log(result.data[0].acco_nama)
-    setdataEkspedisi(result.data);
-  };
-
-  const cekOngkir = async () => {
-    const result = await axios.get(
-      `${apiExpedition}/v1/cekongkir/${citySeller}/${cityTo}/${selectedEkspedisi}/REGULER`
-    );
-
-    if (result.data.length > 0) {
-      setOngkir(result.data[0].exro_cost);
-    } else {
-      setOngkir(0);
-    }
-    console.log(ongkir);
-  };
-
-  const fetchCitySeller = async () => {
-    console.log({ accId });
-    const result = await axios({
-      url: `${apiOrder}/v1/orders/${accId}`,
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(result);
-    console.log("city : " + result.data[0].city_name);
-    setCitySeller(result.data[0].city_name);
-    setaccIdSeller(result.data[0].acco_id);
-    console.log({ citySeller });
-  };
-
-  function onHandleClickCodePay() {
-    if (saldo <= SubTotal) {
-      setLess(true);
-      alert("Saldo kurang : Rp. " + numberWithCommas(saldo));
-    } else {
-      setLess(false);
-      alert("Saldo CodePay : Rp. " + numberWithCommas(saldo));
-    }
-  }
-
-  const onCreateOrder = () => {
-    if (saldo < totalOrder) {
-      alert("Saldo tidak cukup");
-    } else if (ongkir === 0) {
-      alert("Harap pilih ekspedisi");
-    } else {
-      setShowVerifyPin(true);
-      console.log("oncreateorder");
-      let orders = {
-        order_subtotal: SubTotal,
-        order_weight: weight,
-        order_discount: 0,
-        order_tax: subTotalPajak,
-        order_total_due: totalOrder,
-        order_total_qty: qty,
-        order_acco_id: accId,
-        order_acco_id_seller: accIdSeller,
-        order_line_items: [],
-        // ongkir : ongkir,
-      };
-      CartOrders.cart_line_items.map((x) =>
-        orders.order_line_items.push(JSON.stringify(x))
-      );
-      console.log(orders);
-      createOrders(orders);
-    }
-    // history.push('/orders')
-  };
-
-  const createOrders = async (orders) => {
-    try {
-      let response = await axios.post(`${apiOrder}/orders/newOrder/${accId}`, {
-        data: orders,
-      });
-      data.order_name = response.data.order_name;
-      return await response.data;
-    } catch (err) {
-      return await err.message;
-    }
-  };
-
   useEffect(() => {
     console.log(watrNumber);
-    axios.put("http://localhost:3004/api/orders", {
+    axios.put(`${apiOrder}/orders`, {
       order_name: data.order_name,
       order_watr_numbers: watrNumber,
     });
@@ -303,27 +191,6 @@ export default function CartOrders() {
 
   return (
     <>
-      {loading ? (
-        <div className="grid w-80 mx-auto mt-10 my-2 text-center border shadow-md border-gray-300 rounded-md overflow-hidden text-black bg-gray-100">
-          <h1 className="font-bold">PROCESSING YOUR REQUEST {loadingText}</h1>
-        </div>
-      ) : showVerifyPin ? (
-        <VerifyPayment
-          wale_id={data.wale_id}
-          acco_id={data.acco_id}
-          setShowVerifyPin={setShowVerifyPin}
-          setVerified={setVerified}
-          verified={verified}
-          setLoading={setLoading}
-          setPaid={setPaid}
-          data={data}
-          setWatrNumber={setWatrNumber}
-        />
-      ) : paid ? (
-        <div>
-          <Orders />
-        </div>
-      ) : (
         <div>
           <div class="container-md mx-auto p-4 rounded-lg py-4 mb-5 border-4 border-pink-400">
             <h1 class="text-red-500 text-left font-sans-serif fas fa-map-marker-alt">
@@ -354,8 +221,8 @@ export default function CartOrders() {
               </div>
             </div>
 
-            {CartOrders.cart_line_items
-              ? CartOrders.cart_line_items.map((x) => (
+            {CartOrders.orders_line_items
+              ? CartOrders.orders_line_items.map((x) => (
                   <>
                     <div class="flex flex-wrap md:w-6/12 md:mt-1 px-5 font-normal md:font-light text-left font-sans-serif">
                       <img
@@ -368,8 +235,8 @@ export default function CartOrders() {
                       <div className="text-sm block my-4 p-3 text-black">
                         <div className="flex justify-between text-gray-500">
                           <div>Rp.{numberWithCommas(x.product.prod_price)}</div>
-                          <div>{x.clit_qty}</div>
-                          <div>Rp.{numberWithCommas(x.clit_subtotal)}</div>
+                          <div>{x.orit_qty}</div>
+                          <div>Rp.{numberWithCommas(x.order_total_due)}</div>
                         </div>
                       </div>
                     </div>
@@ -384,7 +251,6 @@ export default function CartOrders() {
             <span class="fas fa-truck"> Check Status Pengiriman</span>
           </button>
         </div>
-      )}
     </>
   );
 }

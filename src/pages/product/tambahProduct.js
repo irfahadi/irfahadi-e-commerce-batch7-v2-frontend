@@ -30,6 +30,7 @@ export default function TambahProduct() {
     const [prova_optionSize, setProvaOptionSize] = useState('')
     const [image, setImage] = useState('')
     const [loading, setLoading] = useState(false)
+    const [primpath, setPrimpath] = useState()
 
     toast.configure()
     const notify = () => {
@@ -83,11 +84,6 @@ export default function TambahProduct() {
         setProductBrand(value)
         setError('')
     }
-    // const onChangeProductAco = (e) => {
-    //     const value = e.target.value
-    //     setProductAco(value)
-    //     setError('')
-    // }
     const onChangeProductWeight = (e) => {
         const value = e.target.value
         setProductWeight(value)
@@ -123,9 +119,6 @@ export default function TambahProduct() {
         setProvaOptionSize(value)
         setError('')
     }
-    // const uploadImage = (files) => {
-    //     console.log(files[0])
-    // }
 
     const uploadImage = async e => {
         const files = e.target.files
@@ -250,8 +243,9 @@ export default function TambahProduct() {
                                         notifyErr()
                                     } else {
                                         if (result.dataImages) {
+                                            image('')
                                 
-                                            // setProvaNameSize('')
+                                            setPrimpath('')
                                             // setProvaOptionSize('')
                                             // setProvaProdId('')
                     
@@ -263,7 +257,7 @@ export default function TambahProduct() {
                                 })
                             
                     } notify()
-                }
+                } history.push('/productsaya')
             })
             .catch((e) => {
                 setError(e.response.message)

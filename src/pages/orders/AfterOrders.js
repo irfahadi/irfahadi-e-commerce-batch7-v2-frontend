@@ -58,7 +58,8 @@ export default function AfterOrders() {
       .catch((err) => console.error(err));
   };
 
-  const onShow = async() => {
+  const onShow = async(cart_id) => {
+    localStorage.setItem('cartId',cart_id)
     history.push("/cart-orders");
   };
 
@@ -108,31 +109,25 @@ export default function AfterOrders() {
                           </div>
                         </div>
                       </td>
-                      <td class="gap-2 ">
+                      <td class="border border-b gap-2 ">
                         <div class="text-sm font-medium text-gray-900 ">
                           {x.cart_created_on}
                         </div>
                       </td>
-                      <td>
-                        <div class="ml-4 flex flex-row">
-                          <div class="text-sm font-medium text-center text-gray-900">
-                            {x.cart_total_weight} kg
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="ml-4">
+                      <td class="border border-b gap-2">
                           <div class="text-sm font-medium text-gray-900">
-                            Rp.{numberWithCommas(x.cart_total_amount)}
-                          </div>
+                            {x.cart_total_weight} kg
                         </div>
                       </td>
-                      <td>
-                        <div class="ml-4">
+                      <td class="border border-b gap-2">
+                          <div class="text-sm font-medium text-gray-900">
+                            Rp. {numberWithCommas(x.cart_total_amount)}
+                        </div>
+                      </td>
+                      <td class="border border-b gap-2 ">
                           <div class="text-sm font-medium text-gray-900">
                             {x.cart_total_qty}
                           </div>
-                        </div>
                       </td>
                       {/* <td>
                         <div class="ml-4">
@@ -141,10 +136,10 @@ export default function AfterOrders() {
                           </button>
                         </div>
                       </td> */}
-                      <td>
+                      <td class="border border-b gap-2 ">
                         <div class="ml-4">
                           <button
-                            onClick={onShow}
+                            onClick={()=>onShow(x.cart_id)}
                             class="text-blue-400 hover:text-blue-600 focus:outline-none pl-6"
                           >
                             Show

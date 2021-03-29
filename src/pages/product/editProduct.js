@@ -35,6 +35,7 @@ export default function EditProduct(props) {
     const [prova_optionSize, setProvaOptionSize] = useState('')
     const [image, setImage] = useState('')
     const [prim_id, setPrim_id] = useState('')
+    const [primpath, setPrimpath] = useState()
     const [loading, setLoading] = useState(false)
     
 
@@ -187,7 +188,8 @@ export default function EditProduct(props) {
                 setProva_id2(listProduct.product_variants[1].prova_id)
                 setProvaNameSize(listProduct.product_variants[1].prova_name)
                 setProvaOptionSize(listProduct.product_variants[1].prova_option)
-                setPrim_id(listProduct.product_images[0]?.prim_id)
+                setPrim_id(listProduct.product_images[0].prim_id)
+                setImage(listProduct.product_images[0].prim_path)
 
             }
         };
@@ -296,7 +298,7 @@ export default function EditProduct(props) {
                                     } else {
                                         if (result.dataImages) {
                                 
-                                            // setProvaNameSize('')
+                                            setPrimpath('')
                                             // setProvaOptionSize('')
                                             // setProvaProdId('')
                     

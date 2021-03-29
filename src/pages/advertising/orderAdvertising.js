@@ -2,13 +2,14 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Sidebar from "./sidebar";
 import { apiAdvertising } from '../../config/apiUrl';
-import {TableAdvertising} from './tableAdvertising'
-import AddEditForm from './AddEditForm'
+import {TableAdvertising} from './orad/tableAdvertising'
+import AddEditForm from './orad/AddEditForm'
 
-export default function Advertising() {
+export default function OrderAdvertising() {
   const [Adv, setAdv] = useState([])
   const [isModalShow, setisModalShow] = useState(false)
   const [dataEditRow, setdataEditRow] = useState(null)
+  const acco_id = localStorage.getItem("dataAccountId")
   
   useEffect(() => {
     fetchAdv()
@@ -16,7 +17,7 @@ export default function Advertising() {
 
   async function fetchAdv(){
     return await axios({
-      url: `${apiAdvertising}/packageType/`,
+      url: `${apiAdvertising}/orderAdvertising/${acco_id}`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -49,26 +50,24 @@ export default function Advertising() {
       .catch((err) => console.error(err));
   }
   
-
-
     return (
-      <div className="flex flex-wrap">
-        <Sidebar />
-        <div className="w-full md:w-9/12">
-          <TableAdvertising adv={Adv}
-          setShowModal = {onModalShow}
-          seteDelete = {onDeleteRow}
-          setEdit = {onEditRow}
-          fetchAdv = {fetchAdv}
-          />
-          {
-            isModalShow && <AddEditForm 
-            setShowModal={onModalShow} 
-            dataRow = {dataEditRow}
+        <div className="flex flex-wrap">
+            <Sidebar />
+            <div className="w-full md:w-9/12">
+            <TableAdvertising adv={Adv}
+            // setShowModal = {onModalShow}
+            seteDelete = {onDeleteRow}
+            // setEdit = {onEditRow}
             fetchAdv = {fetchAdv}
-        />
-          }
+            />
+            {/* {
+                isModalShow && <AddEditForm 
+                setShowModal={onModalShow} 
+                dataRow = {dataEditRow}
+                fetchAdv = {fetchAdv}
+            />
+            } */}
+            </div>
         </div>
-      </div>
-    );
+    )
 }

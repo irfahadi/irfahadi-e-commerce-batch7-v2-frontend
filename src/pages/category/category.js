@@ -221,12 +221,13 @@ function Category(props) {
                                                         }
                                                     })
                                                     .map((cate, index) => {
+                                                        console.log(cate)
                                                         return (
                                                             <tr key={cate.id} >
                                                                 <td className="text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2  my-2 uppercase ">{cate.cate_name}</td>
                                                                 <td className="text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2  my-2 uppercase ">{cate.cate_cate_id}</td>
-                                                                <td className="text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2  my-2 uppercase">
-                                                                    <img class="h-30 w-30" src={categoryImg} />
+                                                                <td className=" flex flex-wrap justify-center text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2">
+                                                                    <img class="bg-center h-20 w-20 my-2 " src={cate.category_image.caim_path} />
                                                                 </td>
                                                                 <td className="border-2">
                                                                     <div class="flex justify-center  ">

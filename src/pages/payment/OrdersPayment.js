@@ -1,3 +1,4 @@
+import { OrdersCheckout } from './OrdersCheckout'
 import { useState, useEffect } from "react";
 import { CreateNewTransaction } from './api/CreateNewTransaction'
 import VerifyPayment from './VerifyPayment'
@@ -6,7 +7,7 @@ import axios from "axios";
 import QRCode from "react-qr-code";
 import { GetBankAccount } from './api/BankAccountApi'
 
-const OrdersKw = () => {
+const OrdersPayment = () => {
     let [counter, setCounter] = useState(0);
     let text = " . . . . . . . . ".split("")
     let [loadingText, setLoadingText] = useState(text[0])
@@ -22,13 +23,12 @@ const OrdersKw = () => {
     let apiToken = apiPayment + "/walletTransaction/generate-token"
 
     let [listBank, setListBank] = useState([])
-    let [selectedBank, setSelectedBank] = useState()
-
+    let [selectedBank, setSelectedBank] = useState(null)
     const [data, setData] = useState({
         "acco_id": localStorage.getItem("dataAccountId"),
-        "total_amount": 10,
+        "total_amount":null,
         "transaction_type": "order",
-        "order_name": "order12345",
+        "order_name": "#",
         "payment_by": "wallet"
     })
 
@@ -82,6 +82,14 @@ const OrdersKw = () => {
         }
     }
 
+    useEffect(()=>{
+        if(paid){
+            setTimeout(()=>{
+                setPaid(false)
+            },5000)
+        }
+    },[paid])
+
     useEffect(async () => {
         try {
             let gotBankAccount = await GetBankAccount(data.acco_id)
@@ -101,39 +109,10 @@ const OrdersKw = () => {
 
     return (
         <>
-            <div>
-                <p>{data.acco_id}</p>
-                <p>{data.wale_id}</p>
-                <p>{data.total_amount}</p>
-                <p>{data.transaction_type}</p>
-                <p>{data.order_name}</p>
-
-                <select value={paymentBy} onChange={onChangePayment}>
-                    <option>Select Payment Option</option>
-                    <option value="wallet">Wallet</option>
-                    <option value="transfer_bank">Trasfer Bank</option>
-                </select>
-                <button className="py-2 px-4 font-extralight text-white rounded-xl bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50" onClick={onHandleClickPay}>
-                    Proceed to Payment
-                </button>
-
-                {paymentBy == "transfer_bank" && listBank.length > 1 ?
-                    <select value={selectedBank} onChange={onChangeSelectedBank} >
-                        <option>Select Bank</option>
-                        {
-                            listBank.map((x) => {
-                                return <option value={x.bacc_id}>{x.bank.bank_name}</option>
-                            })
-                        }
-                    </select>
-                    : null
-                }
-
-            </div>
             {
                 loading ?
-                    <div className="grid w-80 mx-auto mt-10 my-2 text-center border shadow-md border-gray-300 rounded-md overflow-hidden text-black bg-gray-100">
-                        <h1 className="font-bold">PROCESSING YOUR REQUEST {loadingText}</h1>
+                    <div className="grid h-screen">
+                        <h1 className="w-80 mx-auto px-2 py-2 text-center overflow-hidden text-black font-bold">PROCESSING YOUR REQUEST {loadingText}</h1>
                     </div> :
                     showVerifyPin ?
                         <VerifyPayment
@@ -154,12 +133,19 @@ const OrdersKw = () => {
                                     <button className="w-2/12 h-8 bg-gray-700 text-white rounded-md">Pay</button>
                                 </a>
                             </div>
-                            : paid ? <div>
-                                <h1>Pembayaran Berhasil</h1>
-                            </div> : null
+                            : paid ? 
+                            <div className="flex flex-col h-screen text-center">
+                            <header className="h-10 mt-2">
+                                <h1 className="font-bold text-4xl">Pembayaran Berhasil</h1>
+                            </header>
+                            </div> : 
+                        <OrdersCheckout
+                        data={data}
+                        setShowVerifyPin={setShowVerifyPin}
+                        />
             }
         </>
     )
 }
 
-export default OrdersKw
+export default OrdersPayment

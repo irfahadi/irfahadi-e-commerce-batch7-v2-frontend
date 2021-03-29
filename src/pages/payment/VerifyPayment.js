@@ -11,6 +11,7 @@ const VerifyPayment = (props) => {
     const onSubmit = (e) => {
         e.preventDefault()
         data.pin_number = pin
+        data.order_name = null
         console.log(data.total_amount)
         axios.post(apiPin, data).then((result) => {
             console.log(result)
@@ -21,6 +22,7 @@ const VerifyPayment = (props) => {
                     props.setVerified(true)
                     props.setPaid(true)
                     props.setLoading(false)
+                    props.setWatrNumbers(result.data.watr_numbers)
                 }, 3000);
             } else {
                 props.setVerified(false)

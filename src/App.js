@@ -53,7 +53,15 @@ import addCond from './pages/condition/addCond';
 import {EditCond} from './pages/condition/editCond';
 import addCate from './pages/category/addCate';
 import CateUpload from './pages/category/cateUpload';
-
+import { EditCate } from './pages/category/editCate';
+import OrderAdvertising from './pages/advertising/orderAdvertising';
+import OrderAdvertisingProduct from './pages/advertising/orderAdvertisingProduct';
+import OrdersPayment from './pages/payment/OrdersPayment'
+import SummaryPulsa from './pages/billTopup/summaryPulsa';
+import SummaryInternet from './pages/billTopup/summaryInternet'
+import SummaryGame from './pages/billTopup/summaryGame';
+import SummaryPLN from './pages/billTopup/summaryPLN';
+import SummaryPDAM from './pages/billTopup/summaryPDAM';
 function App() {
   return (
     <BrowserRouter>
@@ -78,6 +86,7 @@ function App() {
           <Route path="/category" component={Category} exact />
           <Route path="/addCate" component={addCate} exact />
           <Route path="/upload" component={CateUpload} exact />
+          <Route path="/editcate" component={EditCate} exact />
           {/* end Category */}
           <Route path="/cart" component={Cart} />
           <Route path="/cart-orders" component={CartOrders} />
@@ -112,12 +121,20 @@ function App() {
           <Route path="/ordershippingarrival" component={OrderShippingArrivalIndex}/>
           <Route path="/advertising/my-adv" component={MyAdv}/>
           <Route path="/advertising/add-adv" component={AddAdv}/>
+          <Route path="/advertising/orad" component={OrderAdvertising}/>
+          <Route path="/advertising/orap" component={OrderAdvertisingProduct}/>
           <Route path="/wallet" component={Wallet}/>
           <Route path="/bank-account/" component={BankAccount}/>
           <Route path="/transactions/:acco_id" component={Transaction}/>
           <Route path="/order-kw" component={OrdersKw}/>
           <Route path="/wallet-bank" component={WalletAndBank}/>
+          <Route path="/order/checkout" component={OrdersPayment}/>
           <Route component={PageNotFound}/>
+          <Route path="/summaryPulsa" component={SummaryPulsa}/>
+          <Route path="/summaryInternet" component={SummaryInternet}/>
+          <Route path="/summaryGame" component={SummaryGame}/>
+          <Route path="/summaryPLN" component={SummaryPLN}/>
+          <Route path="/summaryPDAM" component={SummaryPDAM}/>
         </Switch>
       </div>
       <Footer></Footer>

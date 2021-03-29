@@ -24,6 +24,7 @@ export default function AddAdv() {
   let [expired, setExpired] = useState()
   let [token, setToken] = useState('')
   let apiToken = apiPayment + "/walletTransaction/generate-token"
+  let [watrNumbers,setWatrNumbers] = useState()
 
   let [listBank, setListBank] = useState([])
   let [selectedBank, setSelectedBank] = useState()
@@ -122,9 +123,10 @@ export default function AddAdv() {
   },[Amount,BillAmount])
 
   const onSubmit = async (data) => {
-    console.log(wallet)
-    console.log(BillAmount*Amount)
+    console.log(data)
+    // console.log(BillAmount*Amount)
     data.total_amount = BillAmount*Amount
+    
     if (wallet < BillAmount*Amount) {
       alert("Salo Kurang")
     } else {
@@ -137,6 +139,7 @@ export default function AddAdv() {
               setLoading(false)
               setShowVerifyPin(true)
             }, 2000)
+            submit()
           } catch (error) {
             console.log(error)
           }
@@ -151,6 +154,7 @@ export default function AddAdv() {
               setTransferBank(true)
               setLoading(false)
             }, 2000)
+            submit()
           } catch (error) {
             console.log(error)
           }
@@ -158,8 +162,42 @@ export default function AddAdv() {
           break;
       }
     }
+    
     reset()
   }
+
+  const submit = async () => {
+    try {
+      if(watrNumbers){
+        const order_advertising = {
+          orad_publish_on : data.publishedDate,
+          orad_finished_on : data.finishedDate,
+          orad_bill_amount : data.totalBill,
+          orad_watr_numbers: watrNumbers,
+          orad_acco_id : acco_id,
+          orad_stat_name : 'new',
+          orad_pack_name : Package.pack_name
+        }
+        const order_advertising_product = {
+          orap_total_duration: Package.pack_duration,
+          orap_total_amount: Package.pack_amount,
+          orap_total_duration: Package.pack_duration,
+          orap_total_amount: Package.pack_amount,
+          orap_total_duration: Package.pack_duration,
+          orap_stat_name: 'new',
+          orap_prod_id: adv_id      
+        }
+        const orderAdverting = await axios.post(`${apiAdvertising}/orderAdvertising/`,order_advertising)
+        if(orderAdverting) return await axios.post(`${apiAdvertising}/orderAdvertisingProduct/${orderAdverting.orad_id}`,order_advertising_product)
+      }  
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // useEffect(()=>{
+  //   console.log(watrNumbers)
+  // },[watrNumbers])
 
   const onChangeSelectedBank = (e) => {
     setSelectedBank(e.target.value)
@@ -193,6 +231,7 @@ export default function AddAdv() {
               setLoading={setLoading}
               setPaid={setPaid}
               data={data}
+              setWatrNumbers={setWatrNumbers}
             />
             : transferBank ?
               <div className=" w-screen content-center mt-4 ml-4">
@@ -231,7 +270,7 @@ export default function AddAdv() {
                 </div>
                   </div>
                   <div className="w-full md:w-9/12">
-                    {Product.product_images && <img src={`../${Product.product_images[0] ? Product.product_images[0].prim_filename : "adv.jpg"}`} class=" ml-5 rounded-lg inset-0 w-64 h-64 object-cover " alt="product" style={{ display: 'block', margin: 'auto' }} />}
+                    {Product.product_images && <img src={Product.product_images[0] ? Product.product_images[0].prim_path : "../adv.jpg"} class=" ml-5 rounded-lg inset-0 w-64 h-64 object-cover " alt="product" style={{ display: 'block', margin: 'auto' }} />}
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="flex flex-col content-evenly xl:px-32 md:px-24 p-5">
                         <label>Published Date</label>
@@ -245,63 +284,73 @@ export default function AddAdv() {
                           <span className="text-red-500">This field is required</span>
                         )}
 
-                        <label>Package Type</label>
-                        <select name="packageType" onChange={(e) => {
-                          var index = e.target.selectedIndex
-                          setPackage(e.target[index].text)
-                          setAmount(e.target.value)
-                        }
-                        } ref={register}
-                          className="bg-gray-200 rounded"
-                        >
-                          {
-                            Pack.map(x => <option value={x.pack_amount}>{x.pack_name}</option>)
-                          }
-                        </select>
+                <label className="mt-5">Package Type</label>
+                <select
+                  name="packageType"
+                  onChange={(e) => {
+                    var index = e.target.selectedIndex;
+                    setAmount(e.target.value);
+                    Pack.map(x=>{
+                      if(e.target[index].text===x.pack_name)
+                      return setPackage(x)
+                    })
+                  }}
+                  ref={register}
+                  className="bg-gray-200 rounded p-1"
+                  required
+                >
+                  <option value="" disabled selected >Select Your Package</option>
+                  {Pack.map((x) => (
+                    <option value={x.pack_amount}>{x.pack_name}</option>
+                  ))}
+                </select>
 
-                        {
-                          Package.includes("hari") && <>
-                            <label>Finished Date</label>
-                            <input
-                              name="finishedDate"
-                              type="date"
-                              className="bg-gray-200 rounded"
-                            />
-                            {errors.finishedDate && (
-                              <span className="text-red-500">This field is required</span>
-                            )}
-                          </>
-                        }
-                        <label>Amount</label>
-                        <input
-                          name="amount"
-                          type="number"
-                          ref={register({ required: true })}
-                          className="bg-gray-200 rounded"
-                          onChange={e => setBillAmount(e.target.value)}
-                        />
-                        {errors.amount && (
-                          <span className="text-red-500">This field is required</span>
-                        )}
+                {Package.pack_name?.includes("hari") && (
+                  <>
+                    <label className="mt-5">Finished Date</label>
+                    <input
+                      name="finishedDate"
+                      type="date"
+                      className="bg-gray-200 rounded p-1"
+                    />
+                    {errors.finishedDate && (
+                      <span className="text-red-500">
+                        This field is required
+                      </span>
+                    )}
+                  </>
+                )}
+                <label className="mt-5">Amount</label>
+                <input
+                  name="amount"
+                  type="number"
+                  ref={register({ required: true })}
+                  className="bg-gray-200 rounded p-1"
+                  onChange={(e) => setBillAmount(e.target.value)}
+                  min="1"
+                />
+                {errors.amount && (
+                  <span className="text-red-500">This field is required</span>
+                )}
 
-                        <label>Total Bill Amount</label>
+                        <label className="mt-5">Total Bill Amount</label>
                         <input
                           name="totalBill"
                           type="number"
-                          className="bg-gray-200 rounded"
+                          className="bg-gray-200 rounded p-1"
                           ref={register}
                           value={BillAmount * Amount}
                         />
-                        <label>
+                        <label className="mt-5">
                           Payment By
                         </label>
-                        <select className="border border-gray" value={paymentBy} onChange={onChangePayment}>
+                        <select className="bg-gray-200 rounded p-1" value={paymentBy} onChange={onChangePayment}>
                           <option>Select Payment Option</option>
                           <option value="wallet">Wallet</option>
                           <option value="transfer_bank">Trasfer Bank</option>
                         </select>
                         {paymentBy == "transfer_bank" && listBank.length > 1 ?
-                          <select className="border border-gray" value={selectedBank} onChange={onChangeSelectedBank} >
+                          <select className="bg-gray-200 rounded p-1" value={selectedBank} onChange={onChangeSelectedBank} >
                             <option>Select Bank</option>
                             {
                               listBank.map((x) => {
