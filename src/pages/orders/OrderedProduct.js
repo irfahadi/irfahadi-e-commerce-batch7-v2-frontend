@@ -8,7 +8,7 @@ const OrderedProduct = () => {
 
     useEffect(async () => {
         try {
-            let result = await axios.get("http://localhost:3005/api/orders/ordered-product/" + acco_id)
+            let result = await axios.get(`${apiPayment}/orders/ordered-product/` + acco_id)
             console.log(result)
             setOrderedProduct(result.data)
         } catch (error) {
@@ -23,7 +23,7 @@ console.log(orderedProduct)
 
     const onProcessOrder = async (e) => {
       console.log(e.target.value)
-      await axios.post('http://localhost:3005/api/orders/process',{order_name:e.target.value})
+      await axios.post(`${apiPayment}/orders/process`,{order_name:e.target.value})
       setRefresh(!refresh)
     }
 
