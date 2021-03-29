@@ -49,22 +49,6 @@ export default function CartOrders() {
   let subTotalPajak = SubTotal + SubTotal * (10 / 100);
   let [less, setLess] = useState();
   let [dataEkspedisi, setdataEkspedisi] = useState();
-  let [counter, setCounter] = useState(0);
-  let text = " . . . . . . . .".split("");
-  let [loadingText, setLoadingText] = useState(text[0]);
-  let [refresh, setRefresh] = useState(false);
-  let [showVerifyPin, setShowVerifyPin] = useState(false);
-  let [loading, setLoading] = useState(false);
-  let [verified, setVerified] = useState(null);
-  let [paid, setPaid] = useState(false);
-  let [data, setData] = useState({
-    acco_id: accId,
-    total_amount: 0,
-    transaction_type: "order",
-    order_name: "#",
-    payment_by: "wallet",
-  });
-  let [watrNumbers, setWatrNumbers] = useState();
 
   toast.configure();
   const notify = () => {
@@ -96,12 +80,14 @@ export default function CartOrders() {
   }
 
   useEffect(() => {
-    fetchCartOrders();
-    fetchAddress();
-    fetchExpedition();
-    fetchCitySeller();
-    console.log(accId);
-    console.log(SubTotal);
+    try {
+      fetchCartOrders();
+      fetchAddress();
+      fetchExpedition();
+      fetchCitySeller();
+    } catch (error) {
+      console.log(error)
+    }
   }, []);
 
   useEffect(() => {
@@ -141,25 +127,6 @@ export default function CartOrders() {
     data.total_amount = subTotalPajak + Number(ongkir);
     settotalOrder(subTotalPajak + Number(ongkir));
   }, [ongkir]);
-
-  useEffect(() => {
-    // console.log(counter);
-    if (loading) {
-      if (counter > text.length - 1) {
-        setCounter(0);
-        setLoadingText("");
-        setRefresh(!refresh);
-      } else {
-        setCounter(counter + 1);
-        setTimeout(() => {
-          setLoadingText(loadingText + text[counter]);
-          setRefresh(!refresh);
-        }, 500);
-      }
-    } else {
-      console.log("do nothing");
-    }
-  }, [loading, refresh]);
 
   const fetchCartOrders = async () => {
     return await axios({
@@ -266,7 +233,6 @@ export default function CartOrders() {
     } else if (ongkir === 0) {
       notifyErrEks();
     } else {
-      setShowVerifyPin(true);
       console.log("oncreateorder");
       let orders = {
         order_subtotal: SubTotal,
@@ -285,9 +251,9 @@ export default function CartOrders() {
       );
       console.log(orders);
       createOrders(orders);
-      // setCartOrders([]);
+      history.push('/checkout-mycart')
+
     }
-    // history.push('/orders')
   };
 
   const createOrders = async (orders) => {
@@ -302,13 +268,15 @@ export default function CartOrders() {
     }
   };
 
-  useEffect(() => {
-    console.log(watrNumbers);
-    axios.put(`${apiOrder}/orders`, {
-      order_name: data.order_name,
-      order_watr_numbers: watrNumbers,
-    });
-  }, [watrNumbers]);
+  const deleteCart = async (cart_id) => {
+    try {
+      let response = await axios.delete(`${apiCart}/cartLineItems/${cart_id}`)
+      .then(async()=> await axios.delete(`${apiCart}/cart/${cart_id}`));
+      return response
+    } catch (err) {
+      return await err.message;
+    }
+  };
 
   useEffect(() => {}, [selectedEkspedisi]);
 
@@ -325,27 +293,6 @@ export default function CartOrders() {
 
   return (
     <>
-      {loading ? (
-        <div className="grid w-80 mx-auto mt-10 my-2 text-center border shadow-md border-gray-300 rounded-md overflow-hidden text-black bg-gray-100">
-          <h1 className="font-bold">PROCESSING YOUR REQUEST {loadingText}</h1>
-        </div>
-      ) : showVerifyPin ? (
-        <VerifyPayment
-          wale_id={data.wale_id}
-          acco_id={data.acco_id}
-          setShowVerifyPin={setShowVerifyPin}
-          setVerified={setVerified}
-          verified={verified}
-          setLoading={setLoading}
-          setPaid={setPaid}
-          data={data}
-          setWatrNumbers={setWatrNumbers}
-        />
-      ) : paid ? (
-        <div>
-          <Orders />
-        </div>
-      ) : (
         <div>
           <div class="container-md mx-auto p-4 rounded-lg shadow py-4 mb-5 border-4 border-pink-600">
             <h1 class="text-red-500 text-left font-sans-serif fas fa-map-marker-alt">
@@ -498,7 +445,6 @@ export default function CartOrders() {
             </div>
           </div>
         </div>
-      )}
     </>
   );
 }

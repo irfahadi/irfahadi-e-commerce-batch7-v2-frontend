@@ -44,8 +44,14 @@ const OrdersCheckout = (props) => {
         }
     }
 
-    const onCancel = (e) => {
-        console.log(e)
+    const onCancel = async (e) => {
+        console.log(e.target.value)
+        try {
+            let orderCancelled = await axios.post('http://localhost:3005/api/orders/cancel',{order_name:e.target.value})
+            console.log(orderCancelled)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const onPay = (e) => {
@@ -157,17 +163,15 @@ const OrdersCheckout = (props) => {
                                                            </div>
                                                        </div>
                                                    </td>}
-                                                    {x.order_stat_name === "PAID" ? (
-                                                            <td>
-                                                                <div className="ml-4">
-                                                                    <button
-                                                                        value={x.order_name}
-                                                                        className="bg-blue-500 hover:bg-blue-800 focus:outline-none cursor-pointer text-white transition duration-200 font-sans-serif py-1 px-4 rounded-lg"
-                                                                        
-                                                                    >Lihat</button>
-                                                                </div>
-                                                            </td>
-                                                        ):
+                                                    {
+                                                    x.order_stat_name === "PAID" ? (
+                                                            <button
+                                                            value={x.order_name}
+                                                            className="py-1 px-2 bg-primary text-white rounded-lg w-100"
+                                                            onClick={onCancel}>
+                                                            CANCELL</button>
+                                                        ) : 
+                                                    x.order_stat_name === "CHECKOUT" ?
                                                     <td className="py-2 whitespace-nowrap text-sm text-gray-500">
                                                         <button
                                                             value={x.order_name}
@@ -175,10 +179,11 @@ const OrdersCheckout = (props) => {
                                                             onClick={onPay}>
                                                             PAY</button>
                                                         <button
+                                                            value={x.order_name}
                                                             className="py-1 mx-2 px-2 text-white rounded-lg w-100 bg-red-700"
                                                             onClick={onCancel}>
                                                             CANCEL</button>
-                                                    </td>}
+                                                    </td>:null}
                                                 </tr>
                                             </>
                                         ))

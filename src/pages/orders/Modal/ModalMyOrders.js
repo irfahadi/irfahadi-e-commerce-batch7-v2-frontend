@@ -11,8 +11,8 @@ function ModalMyOrders({ setModal, dataFormOrderArrival }) {
     setModal(false);
   };
 
-  const handleUpdate = async () => {
-   
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     const data = {
       order_name: orderName,
       order_stat_name: orderStatName,

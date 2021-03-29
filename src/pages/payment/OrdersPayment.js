@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { CreateNewTransaction } from './api/CreateNewTransaction'
 import VerifyPayment from './VerifyPayment'
 import { apiPayment } from '../../config/apiUrl'
+import {ModalPayment} from './ModalPayment'
 import axios from "axios";
 import QRCode from "react-qr-code";
 import { GetBankAccount } from './api/BankAccountApi'
@@ -139,9 +140,10 @@ const OrdersPayment = () => {
                                 <h1 className="font-bold text-4xl">Pembayaran Berhasil</h1>
                             </header>
                             </div> : 
-                        <OrdersCheckout
+                        <ModalPayment
                         data={data}
                         setShowVerifyPin={setShowVerifyPin}
+                        setPaymentBy={setPaymentBy}
                         />
             }
         </>

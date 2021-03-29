@@ -48,6 +48,14 @@ const Transactions = (props) => {
         setSelectedFilter(e.target.value)
     }
 
+    const changeToWords = (x) => {
+        try {
+           return x.watr_numbers.toString().split("-")[0] == x.watr_wale_id ? "MyWallet" : x.watr_numbers.toString().split("-")[0]   
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(()=>{
         switch (Number(selectedFilter)) {
             case 1:
@@ -100,8 +108,8 @@ const Transactions = (props) => {
                                     return (
                                         <tr className=" text-gray-800 bg-white rounde-xl font-thin overflow-hidden">
                                             <td className="py-3">{x.watr_date}</td>
-                                            <td>{x.watr_numbers.toString().split("-")[0] == x.watr_wale_id ? "MyWallet" : x.watr_numbers.toString().split("-")[0]}</td>
-                                            <td>{x.watr_acc_target == 9999 ? 9999 : "MyWallet"}</td>
+                                            <td>{x.watr_wale_id}</td>
+                                            <td>{x.watr_acc_target}</td>
                                             <td>Rp. {fixNotation(x.watr_credit)}</td>
                                             <td>Rp. {fixNotation(x.watr_debet)}</td>
                                             <td>{x.watr_numbers}</td>

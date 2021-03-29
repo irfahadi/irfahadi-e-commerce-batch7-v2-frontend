@@ -56,43 +56,7 @@ import CateUpload from './pages/category/cateUpload';
 import { EditCate } from './pages/category/editCate';
 import OrderAdvertising from './pages/advertising/orderAdvertising';
 import OrderAdvertisingProduct from './pages/advertising/orderAdvertisingProduct';
-import OrdersPayment from './pages/payment/OrdersPayment'
-import SummaryPulsa from './pages/billTopup/summaryPulsa';
-import SummaryInternet from './pages/billTopup/summaryInternet'
-import SummaryGame from './pages/billTopup/summaryGame';
-import SummaryPLN from './pages/billTopup/summaryPLN';
-import SummaryPDAM from './pages/billTopup/summaryPDAM';
-import OrderBK from './pages/admin/orderBK';
-import UpdateStatus from './pages/product/updateStatus';
-import AllProduct from './pages/admin/allProduct';
-// import sidebar from './components/sideBarMenu/productMaster';
-import Sidebar from './pages/admin/sidebarAdmin'
-import ProductSidebar from './components/sideBarMenu/product';
-import BrandSidebar from './components/sideBarMenu/brand';
-import CategorySidebar from './components/sideBarMenu/category';
-import ConditionSidebar from './components/sideBarMenu/condition';
-import ArchieveSidebar from './components/sideBarMenu/productArchieve';
-import CompletedSidebar from './components/sideBarMenu/productCompleted';
-import BlokirSidebar from './components/sideBarMenu/productBlokir';
-import { useDispatch } from 'react-redux';
-import { fetchAdv } from './features/adv/advSlices';
-import { useEffect } from 'react';
-
-import OrderSK from './pages/admin/orderSK';
-
-import FilesUpload from "./components/FilesUpload";
-// import EditAddress from './pages/address/EditAddress';
-import ReCaptchaSignup from './pages/users/reCaptcha';
-// import MyOrders from './pages/orders/MyOrders';
-import DashboardOrder from './pages/users/DashboardOrder';
-import Penjualanku from './pages/users/Pembelianku';
-import Pembelianku from './pages/users/Pembelianku';
-import IndexAdmin from './pages/admin/indexAdmin'
-import TotalOrderBK from './pages/admin/totalOrderBK';
-import TotalProdBK from './pages/admin/totalProdBK';
-import TotalProdSK from './pages/admin/totalProdSK';
-
-
+import { OrderedProduct } from './pages/orders/OrderedProduct';
 
 
 function App() {
@@ -131,6 +95,7 @@ function App() {
           {/* end Category */}
           <Route path="/cart" component={Cart} />
           <Route path="/cart-orders" component={CartOrders} />
+          <Route path="/orders/ordered-product" component={OrderedProduct}/>
           <Route path="/orders" component={Orders}/>
           <Route path="/login" component={Login} />
           <Route path="/daftar" component={Daftar} />

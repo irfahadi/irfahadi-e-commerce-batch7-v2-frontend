@@ -284,15 +284,17 @@ export default function Product() {
         }
     }, [Product])
 
-    var option = {
-        // width : 400,
-        // height : 250,
-        // zoomWidth:500,
-        // offset: auto,
-        // scale: 1.5
-        opacity: 0.1
-    }
-    new ImageZoom (document.getElementById("zoom"),option)
+    useEffect(() => {
+        axios({
+            url: `${apiUserAccount}/account/1001`,
+            method: "get",
+            headers: {
+                "Content-type": "application/json"
+            }
+        }).then((res) => setAccount(res.data))
+            .catch((err) => console.error(err));
+        console.log(Account)
+    }, [])
 
 
 

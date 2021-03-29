@@ -28,7 +28,7 @@ const OrdersKw = () => {
         "acco_id": localStorage.getItem("dataAccountId"),
         "total_amount": 10,
         "transaction_type": "order",
-        "order_name": "order12345",
+        "order_name": "#",
         "payment_by": "wallet"
     })
 
@@ -98,6 +98,7 @@ const OrdersKw = () => {
     const onChangePayment = (e) => {
         setPaymentBy(e.target.value)
     }
+
 
     return (
         <>
