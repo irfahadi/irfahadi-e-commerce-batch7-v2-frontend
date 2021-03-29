@@ -56,7 +56,7 @@ function Index() {
 
     const fetchFilterOrders = async ()=>{
         return await axios({
-            url:`${apiShipping}/order_filter/1031/${stat}`,
+            url:`${apiShipping}/order_filter/${localStorage.getItem('dataAccountId')}/${stat}`,
             method: "get",
             headers: {
                 "Content-Type": "application/json"
@@ -239,11 +239,13 @@ function Index() {
     // console.log(OrderDikirim())
     // console.log("ini isi")
     // console.log(OrderShipping)
-
-    console.log(orderDikirim)
+    // console.log("disini")
+    // console.log(filterOrder.acco_nama)
+    // console.log("ini")
+    // console.log(search)
     return (
         <div>
-            <div class="mt-3 flex flex-wrap justify-center " >
+            <div class="flex flex-wrap justify-center " >
 				<div class="mx-5 my-2   bg-blue-400 rounded-md shadow-md overflow-hidden" onClick={onModalOrderDikirim}>
 				{/* <Link onClick={()=> DetailProduct(prod.prod_id, prod.product_images[0].prim_id)}> */}
 					<div class="px-5 py-3">
@@ -282,20 +284,24 @@ function Index() {
 				</div>
 							
 			</div>
-
-            <div className="flex md:mt-3 px-1 mx-5">
-                <div class="relative">
-                  <div class="absolute top-4 left-3 "> <i class="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
-                  <input type="search" class="h-14 w-96 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none border-bg-primary"
+        <div className="flex flex-row my-4">
+            
+                <div class="flex w-11/12 ml-7 ">
+                {/* <div class="relative">
+                  <div class="absolute top-4 left-3"> <i class="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div> */}
+                  <input type="search" class="border border-gray-600 flex w-full mr-2 h-12 pl-10  rounded-lg z-0 focus:shadow focus:outline-none"
                     placeholder="Search anything..."
                     onChange= {onSearch}
                   >
                   </input>
+                  {/* </div> */}
                 </div>
+
+                <div class="w-2/12">
                 <select
             name="status"
             onChange={onFilter}
-             className="mt-1 block py-2 px-3 mx-5 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+             className="mt-1 block py-2 px-3 h-10 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <option>Filter Status Order...</option>
                 <option value="PAID">Paid</option>
                 <option value="SHIPPING">Shipping</option>
@@ -304,16 +310,20 @@ function Index() {
                           
             </select>
             </div>
-            
+
+
+        </div>    
             <div class="flex flex-wrap">
-                <div class="-my-2 p-8 overflow-x-auto">
+                <div class="-my-2 p-2 overflow-x-auto">
                     <div class="py-2 align-middle inline-block max-w-full">
                         <table class="min-w-full divide-y divide-gray-200 ">
                             <thead class="bg-gray-50">
-
                                 <tr>
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Order Name
+                                            </th>
+                                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Pembeli
                                             </th>
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Created On
@@ -324,9 +334,7 @@ function Index() {
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Weight
                                             </th>
-                                    <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Discount
-                                            </th>
+                                    
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status
                                             </th>
@@ -350,32 +358,34 @@ function Index() {
                                     //     OrderShipping.map((x) => {
                                             // filterOrder.length >0 ?
                                             // filterOrder.map((x) => {
+
                                             filter===false ? (OrderShipping.filter((val)=>{
                                                     if(search == ""){
                                                         return val
                                                     } else if (val.order_name.toLowerCase().includes(search.toLocaleLowerCase())){
                                                         return val
                                                     } 
-                                                }).map((x)=>{
+                                                }).filter((x)=> x.order_stat_name !== "CHECKOUT" && x.order_stat_name !== "CANCELLED" && x.order_acco_id_seller == localStorage.getItem('dataAccountId')).map((x)=>{
                                             return( <tr key={x.order_name}>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
                                                     {x.order_name}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {x.order_created_on}
-                                                </td>
-                                                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                                                    Rp. {numberWithCommas(x.order_subtotal)}
-                                                    {/* {x.order_subtotal} */}
-                                                </td>
-                                                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                                                    {x.order_weight} Kg
-                                                        </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {x.order_discount} %
+                                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                                                    {x.account.acco_nama}
                                                             {/* {x.order_acco_id_seller} */}
                                                     {/* {x.orders_line_items[2].product.prod_acco_id} */}
                                                 </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                                                    {x.order_created_on}
+                                                </td>
+                                                <td class="px-6 py-4 text-center whitespace-nowrap text-xs text-gray-500">
+                                                    Rp. {numberWithCommas(x.order_subtotal)}
+                                                    {/* {x.order_subtotal} */}
+                                                </td>
+                                                <td class="px-6 py-4 text-center whitespace-nowrap text-xs text-gray-500">
+                                                    {x.order_weight} Kg
+                                                        </td>
+                                                
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                         {x.order_stat_name}
@@ -383,39 +393,40 @@ function Index() {
                                                 </td>
                                                 {
                                                     (x.order_stat_name === "PAID") ?
-                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">
                                                             <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRow} value={x.order_name}>SHIPPING</button>
                                                         </td>
                                                     : (x.order_stat_name === "SHIPPING") ?
-                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">
                                                     <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRowShipping} value={x.order_name}>ARRIVED</button>
                                                     </td>
                                                     :
-                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-400">
+                                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-400">
                                                     <button className="py-2 px-4 bg-gray-400 text-white reounded" onClick={()=>{setModal(true)}} disabled="true"> &nbsp; FINISH &nbsp;</button>
                                                     </td>
                                                 }
                                             </tr>)
                                         })) : (filterOrder.map((x)=>{
                                             return( <tr key={x.order_name}>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
                                                     {x.order_name}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {x.order_created_on}
-                                                </td>
-                                                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                                                    Rp. {numberWithCommas(x.order_subtotal)}
-                                                    {/* {x.order_subtotal} */}
-                                                </td>
-                                                <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
-                                                    {x.order_weight} Kg
-                                                        </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {x.order_discount} %
+                                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                                                    {x.acco_nama}
                                                             {/* {x.order_acco_id_seller} */}
                                                     {/* {x.orders_line_items[2].product.prod_acco_id} */}
                                                 </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                                                    {x.order_created_on}
+                                                </td>
+                                                <td class="px-6 py-4 text-center whitespace-nowrap text-xs text-gray-500">
+                                                    Rp. {numberWithCommas(x.order_subtotal)}
+                                                    {/* {x.order_subtotal} */}
+                                                </td>
+                                                <td class="px-6 py-4 text-center whitespace-nowrap text-xs text-gray-500">
+                                                    {x.order_weight} Kg
+                                                        </td>
+                                                
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                         {x.order_stat_name}
@@ -423,15 +434,15 @@ function Index() {
                                                 </td>
                                                 {
                                                     (x.order_stat_name === "PAID") ?
-                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">
                                                             <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRow} value={x.order_name}>SHIPPING</button>
                                                         </td>
                                                     : (x.order_stat_name === "SHIPPING") ?
-                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">
                                                     <button className="py-2 px-4 bg-blue-500 hover:bg-blue-400 text-white reounded" onClick={onEditRowShipping} value={x.order_name}>ARRIVED</button>
                                                     </td>
                                                     :
-                                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-400">
+                                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-400">
                                                     <button className="py-2 px-4 bg-gray-400 text-white reounded" onClick={()=>{setModal(true)}} disabled="true"> &nbsp; FINISH &nbsp;</button>
                                                     </td>
                                                 }

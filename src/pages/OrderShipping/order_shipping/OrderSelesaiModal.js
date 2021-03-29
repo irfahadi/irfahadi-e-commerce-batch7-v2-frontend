@@ -43,6 +43,12 @@ export default function OrderDikirimModal({
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Order Name
                                             </th>
+                                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Produk
+                                            </th>
+                                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Gambar
+                                            </th>
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Created On
                                             </th>
@@ -52,9 +58,7 @@ export default function OrderDikirimModal({
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Weight
                                             </th>
-                                    <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Discount
-                                            </th>
+                                
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status
                                             </th>
@@ -67,6 +71,12 @@ export default function OrderDikirimModal({
                                             <tr key={x.order_name}>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {x.order_name}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {x.orders_line_items[0].product.prod_name}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <img className='img-fluid w-12' src={x.orders_line_items[0].product.product_images[0].prim_path} alt='images' />
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {x.order_created_on}

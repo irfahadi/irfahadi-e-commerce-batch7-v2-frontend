@@ -13,7 +13,7 @@ export default function OrderDikirimModal({
     }
 
 
-
+// console.log(OrderShipping.order_watr_numbers)
 
     return (
         <div>
@@ -43,6 +43,12 @@ export default function OrderDikirimModal({
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Order Name
                                             </th>
+                                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Produk
+                                            </th>
+                                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Gambar
+                                            </th>
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Created On
                                             </th>
@@ -52,9 +58,7 @@ export default function OrderDikirimModal({
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Weight
                                             </th>
-                                    <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Discount
-                                            </th>
+                                    
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status
                                             </th>
@@ -69,6 +73,13 @@ export default function OrderDikirimModal({
                                                 {x.order_name}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {x.orders_line_items[0].product.prod_name}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <img className='img-fluid w-12' src={x.orders_line_items[0].product.product_images[0].prim_path} alt='images' />
+                                                
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {x.order_created_on}
                                                 </td>
                                                 <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
@@ -77,11 +88,7 @@ export default function OrderDikirimModal({
                                                 <td class="px-6 py-4 text-center whitespace-nowrap text-sm text-gray-500">
                                                 {x.order_weight} Kg
                                                         </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {x.order_discount} %
-                                                            {/* {x.order_acco_id_seller} */}
-                                                    {/* {x.orders_line_items[2].product.prod_acco_id} */}
-                                                </td>
+                                                
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                         {x.order_stat_name}
@@ -95,8 +102,6 @@ export default function OrderDikirimModal({
                                         {/* <tr>
                                             <td colSpan={3}>No Records Found.</td>
                                         </tr> */}
-                             
-
                             </tbody>
                         </table>
                                         </div>
