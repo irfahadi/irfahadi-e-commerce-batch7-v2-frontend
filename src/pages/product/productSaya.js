@@ -18,10 +18,11 @@ export default function ProductSaya() {
   const [prodToEdit, setProdToEdit] = useState()
   const acco_id = localStorage.getItem("dataAccountId")
   const token = localStorage.getItem("token");
-  
+
   const onClickAddProduct = () => {
     history.push('/tambahProduct')
   }
+ 
   const onClickEditProduct = (e) => {
     console.log(e)
     setProdToEdit(e.target.value)
@@ -45,12 +46,12 @@ export default function ProductSaya() {
 
   useEffect(() => {
     axios({
-      url: `${apiProductTransaction}/account/${acco_id}`,
+      url: `${apiProductTransaction}/product/getaccount/${acco_id}`,
       method: "get",
       headers: {
         "Content-type": "application/json"
       }
-    }).then((res) => setProduct(res.data.products))
+    }).then((res) => setProduct(res.data))
       .catch((err) => console.error(err));
   }, [showEdit])
 
@@ -67,6 +68,18 @@ export default function ProductSaya() {
       .catch((err) => console.error(err));
     console.log(Category)
   }, [])
+
+  useEffect(() => {
+    axios({
+      url: `${apiProductMaster}/product/prod/${search}`,
+      method: "get",
+      headers: {
+        "Content-type": "application/json"
+      }
+    }).then((res) => setProduct(res.data))
+      .catch((err) => console.error(err));
+    console.log(Category)
+  }, [search])
   //  useEffect(() => {
   //       Product.map((x)=> {
   //         if(x.category.cate_name.includes(Category))
@@ -82,7 +95,7 @@ export default function ProductSaya() {
   //     )
   //   );
   // }, [search, Product]);
-  
+
   // console.log(token)
 
   const a = (axios.defaults.headers.common["Authorization"] =
@@ -94,61 +107,115 @@ export default function ProductSaya() {
   }
 
   {
+    
     return (
       <div>
 
-        <div class="container gap-8 justify-center  flex flex-row flex-wrap   text-2xl uppercase rounded mb-4 ">
-          <Link to="/productSaya" class="w-50 bg-primary text-white font-bold hover:text-black  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-black shadow-md py-2 px-6 inline-flex items-center">Product</Link>
-          <Link to="/brand" class="w-50 bg-primary text-white font-bold hover:text-black  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-black shadow-md py-2 px-6 inline-flex items-center">Brand</Link>
-          <Link to="/category" class="w-50 bg-primary text-white font-bold hover:text-black  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-black shadow-md py-2 px-6 inline-flex items-center">Category</Link>
-          <Link to="/condition" class="w-50 bg-primary text-white font-bold hover:text-black  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-black shadow-md py-2 px-6 inline-flex items-center">Condition</Link>
-        </div>
 
         { !showEdit ? ( //jika showEdit false, maka tampilkan product, jika true maka tampilkan edit form
-          <div className="flex flex-wrap rounded-lg shadow py-5 mb-5 border-4 border-pink-500">
-            <div className="w-full flex flex-wrap content-evenly">
-              <div className="w-2/12 md:mt-10 px-1 ml-10">
-                Nama Product
+          <div className="container w-full flex flex-wrap rounded-lg shadow py-5 mb-5 border-4 border-pink-500">
+            <div className="flex flex-col w-full ">
+              <div class="grid  grid-cols-4 gap-4 ml-5 items-center justify-between">
+                <div className="  items-center ">
+                  Nama Product
                 </div>
-              <div className="w-3/12 md:mt-10 px-1 mr-5">
-                <div class="relative">
-                  <div class="absolute top-4 left-3"> <i class="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
-                  <input type="search" class="h-14 w-96 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none"
-                    placeholder="Search anything..."
+                <div class=" relative mb-2 gap-4 mr-4 ">
+                  <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2 gap-2">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current mr-3 ">
+                      <path
+                        d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                      </path>
+                    </svg>
+                  </span>
+                  <input class="sm:text-sm appearance-none rounded-r rounded-l 
+                            sm:rounded-l-none border border-gray-400 
+                            border-b block pl-8 pr-6 py-2 w-full 
+                            bg-white text-lg placeholder-gray-400 
+                            text-gray-700 focus:bg-white 
+                            focus:placeholder-gray-600 focus:text-gray-700 
+                            focus:outline-none " placeholder="Search "
+                            onChange={(event) => {
+                              setSearch(event.target.value)
+                            }} 
+                   />
+                </div>
+                {console.log(search)}
+
+                {/* <div className="  items-center ">
+                  Kategory
+                </div>
+                <div class=" relative mb-2 gap-4 mr-4 ">
+                  <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2 gap-2">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current mr-3 ">
+                      <path
+                        d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                      </path>
+                    </svg>
+                  </span>
+                  <input class="sm:text-sm appearance-none rounded-r rounded-l 
+                            sm:rounded-l-none border border-gray-400 
+                            border-b block pl-8 pr-6 py-2 w-full 
+                            bg-white text-lg placeholder-gray-400 
+                            text-gray-700 focus:bg-white 
+                            focus:placeholder-gray-600 focus:text-gray-700 
+                            focus:outline-none " placeholder="Search "
                     onChange={(event) => {
                       setSearch(event.target.value)
-                    }}
-                  >
-                  </input>
-                </div>
+                    }} />
+                </div> */}
+
               </div>
-              {/* <div className="w-2/12 md:mt-10 px-1 text-center">
-                Kategori
+              {/* <div class="grid grid-cols-4 gap-4 ml-5 items-center justify-between">
+                <div className="  items-center ">
+                  Stock
                 </div>
-              <div className="w-3/12 md:mt-10 px-1">
-                <select class="block w-52 text-gray-700 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500" name="animals">
-                  <option value="">
-                    Select an kategori
-                </option>
-                  {Category.map((x) => (
-                    <option value={x.cate_id}>{x.cate_name}
+                <div class=" relative mb-2 gap-4 mr-4 ">
+                  <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2 gap-2">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current mr-3 ">
+                      <path
+                        d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                      </path>
+                    </svg>
+                  </span>
+                  <input class="sm:text-sm appearance-none rounded-r rounded-l 
+                            sm:rounded-l-none border border-gray-400 
+                            border-b block pl-8 pr-6 py-2 w-full 
+                            bg-white text-lg placeholder-gray-400 
+                            text-gray-700 focus:bg-white 
+                            focus:placeholder-gray-600 focus:text-gray-700 
+                            focus:outline-none " placeholder="Search "
+                    onChange={(event) => {
+                      setSearch(event.target.value)
+                    }} />
+                </div>
 
-                    </option>))}
-
-                </select>
 
               </div> */}
-              <div className="w-3/12 ml-5 mt-10 flex justify-end">
-                <button onClick={onClickAddProduct} class="bg-primary hover:bg-blue-dark text-white font-bold py-2 px-4 rounded m-auto">
-                  Tambah Produk Baru
+
+            </div>
+            <div class="grid grid-cols-2 gap-4 ml-5 items-center flex sm:justify-items-end">
+              <button onClick={onClickAddProduct} class="bg-primary hover:bg-blue-dark text-white font-bold py-2 px-4 rounded m-auto">
+                Tambah Produk Baru
           </button>
-              </div>
+
+            </div>
+
+
+
+
+
+
+
+            <div className="w-full flex flex-wrap content-evenly">
+
+
 
               <table class="border-collapse w-full mr-10 ml-10 mt-5 ">
                 <thead>
                   <tr>
                     <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell">Produk Id</th>
-                    <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell">Nama Produk</th>
+                    <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell"colSpan="2">Nama Produk</th>
+                    {/* <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell"></th> */}
                     <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell">Deskripsi Produk</th>
                     <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell">Harga</th>
                     <th class="p-3 font-bold uppercase bg-pink-600 text-white border border-gray-300 hidden lg:table-cell">Stok</th>
@@ -159,19 +226,19 @@ export default function ProductSaya() {
                 </thead>
                 <tbody>
                   {Product
-                    .filter((val) => {
-                      if (search == "") {
-                        return val
-                      } else if (val.prod_name.toLowerCase().includes(search.toLocaleLowerCase())) {
-                        return val
-                      }
-                      else if (val.prod_desc.toLowerCase().includes(search.toLowerCase())) {
-                        return val
-                      }
-                    })
+                    // .filter((val) => {
+                    //   if (search == "") {
+                    //     return val
+                    //   } else if (val.prod_name.toLowerCase().includes(search.toLocaleLowerCase())) {
+                    //     return val
+                    //   }
+                      
+                    // })
                     .map((x) => {
+                      
                       console.log(x)
                       return (
+                        x.prod_status === 'blokir' | x.prod_stock < 1 ? null :
                         <tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
                           <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Produk Id</span>
@@ -179,8 +246,13 @@ export default function ProductSaya() {
                             {x.prod_id}
                           </td>
                           <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                            <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Gambar</span>
+                            <img class= "bg-center h-20 w-20 my-2" src={x.prim_path}/>
+                          </td>
+                          <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Nama Produk</span>
                             {x.prod_name}
+                            
                           </td>
                           <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Deskripsi</span>
@@ -201,7 +273,7 @@ export default function ProductSaya() {
                           <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                             <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Actions</span>
                             <button class="text-blue-400 hover:text-blue-600 underline" value={x.prod_id} onClick={onClickEditProduct}>Edit</button>
-                            <a href="" class="text-blue-400 hover:text-blue-600 underline pl-6" onClick={() => {
+                            <a href="" class="text-blue-400 hover:text-blue-600 underline pl-2" onClick={() => {
                               if (
                                 window.confirm(
                                   "apakah anda yakin ingin menghapus data ini?"
@@ -224,7 +296,7 @@ export default function ProductSaya() {
 
           />
         }
-      </div>
+      </div >
     )
   }
 }

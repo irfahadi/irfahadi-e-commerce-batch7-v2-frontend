@@ -8,6 +8,8 @@ import { GetWallet } from '../payment/api/GetWallet'
 import VerifyPayment from '../payment/VerifyPayment'
 import { apiPayment } from '../../config/apiUrl'
 import { GetBankAccount } from '../payment/api/BankAccountApi'
+import { result } from "lodash-es";
+import Sidebar from './sidebar';
 
 export default function AddAdv() {
   //  >>Payment
@@ -33,7 +35,8 @@ export default function AddAdv() {
     "acco_id": localStorage.getItem("dataAccountId"),
     "total_amount": 0,
     "transaction_type": "advertising",
-    "payment_by": "wallet"
+    "payment_by": "wallet",
+    "order_name":"adv"
   })
 
   //Payment<<
@@ -47,6 +50,7 @@ export default function AddAdv() {
   const [Amount, setAmount] = useState(0)
   const [BillAmount, setBillAmount] = useState(0)
   const [wallet, setWallet] = useState()
+  const [Submit, setSubmit] = useState()
 
   // console.log(watch("example")); // watch input value by passing the name of it
 
@@ -123,7 +127,7 @@ export default function AddAdv() {
   },[Amount,BillAmount])
 
   const onSubmit = async (data) => {
-    console.log(data)
+    setSubmit(data)
     // console.log(BillAmount*Amount)
     data.total_amount = BillAmount*Amount
     
@@ -139,7 +143,6 @@ export default function AddAdv() {
               setLoading(false)
               setShowVerifyPin(true)
             }, 2000)
-            submit()
           } catch (error) {
             console.log(error)
           }
@@ -154,7 +157,6 @@ export default function AddAdv() {
               setTransferBank(true)
               setLoading(false)
             }, 2000)
-            submit()
           } catch (error) {
             console.log(error)
           }
@@ -162,42 +164,43 @@ export default function AddAdv() {
           break;
       }
     }
-    
     reset()
   }
 
-  const submit = async () => {
-    try {
-      if(watrNumbers){
-        const order_advertising = {
-          orad_publish_on : data.publishedDate,
-          orad_finished_on : data.finishedDate,
-          orad_bill_amount : data.totalBill,
-          orad_watr_numbers: watrNumbers,
-          orad_acco_id : acco_id,
-          orad_stat_name : 'new',
-          orad_pack_name : Package.pack_name
-        }
-        const order_advertising_product = {
-          orap_total_duration: Package.pack_duration,
-          orap_total_amount: Package.pack_amount,
-          orap_total_duration: Package.pack_duration,
-          orap_total_amount: Package.pack_amount,
-          orap_total_duration: Package.pack_duration,
-          orap_stat_name: 'new',
-          orap_prod_id: adv_id      
-        }
-        const orderAdverting = await axios.post(`${apiAdvertising}/orderAdvertising/`,order_advertising)
-        if(orderAdverting) return await axios.post(`${apiAdvertising}/orderAdvertisingProduct/${orderAdverting.orad_id}`,order_advertising_product)
-      }  
-    } catch (error) {
-      console.log(error)
+  useEffect(()=>{
+    if(watrNumbers){
+      try {
+          let priority = ''
+          if(Number(Package.pack_satuan)>250){
+            priority = { prod_priority: 'highest'}
+          }
+          else{
+            priority = { prod_priority: 'high'}
+          }
+          const order_advertising = {
+            orad_publish_on : Submit.publishedDate,
+            orad_finished_on : Submit.finishedDate||null,
+            orad_bill_amount : Submit.totalBill,
+            orad_watr_numbers: watrNumbers,
+            orad_acco_id : acco_id,
+            orad_stat_name : 'OPEN',
+            orad_pack_name : Package.pack_name
+          }
+          const order_advertising_product = {
+            orap_total_duration: Package.pack_duration,
+            orap_total_amount: Package.pack_amount,
+            orap_current_duration: Package.pack_duration,
+            orap_current_amount: Package.pack_amount,
+            orap_stat_name: 'OPEN',
+            orap_prod_id: adv_id      
+          }
+          axios.put(`https://product-transaction-module.herokuapp.com/api/product/priorty/${adv_id}`,priority)
+          return axios.post(`${apiAdvertising}/orderAdvertising/`,order_advertising).then(result=> axios.post(`${apiAdvertising}/orderAdvertisingProduct/${result.data.orad_id}`,order_advertising_product))
+      } catch (error) {
+        console.log(error)
+      }
     }
-  }
-
-  // useEffect(()=>{
-  //   console.log(watrNumbers)
-  // },[watrNumbers])
+  },[watrNumbers])
 
   const onChangeSelectedBank = (e) => {
     setSelectedBank(e.target.value)
@@ -243,32 +246,10 @@ export default function AddAdv() {
               </div>
               : paid ? <div className="h-screen w-full text-center">
                 <h1 className="text-4xl">Pembayaran Berhasil</h1>
-                <a href="/advertising/my-pkg" className="bg-primary text-white h-1/6 px-4 rounded-md">KEMBALI</a>
+                <a href="/advertising/my-adv" className="bg-primary text-white h-1/6 px-4 rounded-md">KEMBALI</a>
               </div> :
                 <div className="flex flex-wrap">
-                  <div className="w-full md:w-3/12 md:mt-10 px-1 text-center font-bold text-md flex flex-row justify-evenly md:flex-col md:justify-start ">
-                    <div
-                      className="py-5 px-2 hover:text-secondary hover:bg-white"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => history.push("/advertising/my-pkg")}
-                    >
-                      Package Adv
-                </div>
-                    <div
-                      className="py-5 px-2 hover:text-secondary hover:bg-white"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => history.push("/advertising/my-adv")}
-                    >
-                      My Product
-                </div>
-                    <div
-                      className="py-5 px-2 hover:text-secondary hover:bg-white"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => history.push("/advertising/add-adv")}
-                    >
-                      Advertising
-                </div>
-                  </div>
+                  <Sidebar />
                   <div className="w-full md:w-9/12">
                     {Product.product_images && <img src={Product.product_images[0] ? Product.product_images[0].prim_path : "../adv.jpg"} class=" ml-5 rounded-lg inset-0 w-64 h-64 object-cover " alt="product" style={{ display: 'block', margin: 'auto' }} />}
                     <form onSubmit={handleSubmit(onSubmit)}>

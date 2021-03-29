@@ -12,7 +12,8 @@ export default class City extends Component {
         city : [],
         province : [],
         dataEditRow : null,
-        isModalShow : false
+        isModalShow : false,
+        flag        : false
     }
 
 
@@ -30,7 +31,14 @@ export default class City extends Component {
 
     }
 
+    onRefreshTable =()=>{
+        this.refresh()
+        this.showListCity();
+        this.showListProvince();
+        console.log('table city-province direfresh')
+    }
 
+    
 
     // 2.panggil listcity dari api-city, kemudian isi city[] state dengan data dari listcity
     showListCity = () => {
@@ -71,19 +79,13 @@ export default class City extends Component {
     onDeleteRow = (value)=>{
         deleteCity(value).then(response => {
             console.log(response);
-
+            this.onRefreshTable();
         }).catch(function (error) {
             console.log(error);
         });;
-
-        this.onRefreshTable();
     }
 
-    onRefreshTable =()=>{
-        this.refresh()
-        this.showListCity();
-        
-    }
+   
 
 
 
@@ -99,7 +101,7 @@ export default class City extends Component {
                         setShowModal = {this.onShowModal}
                         setDelete = {this.onDeleteRow}
                         setEdit = {this.onEditRow}
-                            
+                        setRefreshTable = {this.onRefreshTable}
                     ></TableCity>
                     {
                         (isModalShow ? (

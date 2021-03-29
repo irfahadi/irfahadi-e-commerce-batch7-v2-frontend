@@ -71,6 +71,7 @@ export default class Province extends Component {
     onRefreshTable =()=>{
         this.refresh()
         this.showListProvince();
+        console.log('table province direfresh')
         
     }
 
@@ -87,7 +88,7 @@ export default class Province extends Component {
                         setShowModal = {this.onShowModal}
                         setDelete = {this.onDeleteRow}
                         setEdit = {this.onEditRow}
-                            
+                        setRefreshTable = {this.onRefreshTable}
                     ></TableProvince>
                     {
                         (isModalShow ? (

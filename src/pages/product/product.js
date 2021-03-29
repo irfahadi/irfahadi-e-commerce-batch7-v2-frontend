@@ -6,9 +6,11 @@ import convertToRupiah from './convertToRupiah'
 import { apiCart, apiProductTransaction, apiUserAccount, apiUserMaster } from "../../config/apiUrl"
 import { useHistory } from 'react-router'
 import { toast } from 'react-toastify'
+import swal from 'sweetalert'
+import ImageZoom from 'js-image-zoom'
 
 export default function Product() {
-
+	
     const [selectedImg, setSelectetImg] = useState([]);
     const [count, setCount] = useState(0)
     const [Size, setSize] = useState([])
@@ -26,6 +28,8 @@ export default function Product() {
     const prod_id = localStorage.getItem("productDetail")
     const primId = localStorage.getItem("productImages")
     const shopName = localStorage.getItem("dataAccountShopName")
+    const terjual = Math.floor(Math.random() * 100) + 1
+    const penilaian = Math.floor(Math.random() * 1000) + 50
 
     toast.configure()
     const notify = () => {
@@ -35,35 +39,47 @@ export default function Product() {
             autoClose: 2000
         })
     }
-
-    useEffect(() => {
-        async function fetchCart() {
-            return await axios({
-                url: `${apiCart}/cart/${acco_id}`,
-                method: 'GET'
-            }).then((result) => setCartId(result.data[0].cart_id))
-                .catch((err) => console.log(err));
-        }
-        fetchCart()
-    }, [])
-
-    useEffect(() => {
-        async function fetchImg() {
-            return await axios({
-                url: `${apiProductTransaction}/productImages/${primId}`,
-                method: 'GET'
-            }).then((result) => setSelectetImg(result.data.prim_path))
-                .catch((err) => console.log(err));
-        }
-        fetchImg()
-    }, [])
+    const fotoproduct = () => {
+        swal({
+        //   title: 'Sweet!',
+          icon: selectedImg,
+          imageWidth: 200,
+          imageHeight: 200,
+          imageAlt: 'Foto Product',
+        })
+      }
 
     const klikCart = (x) => {
         x.preventDefault()
+         const editStok = {
+            prod_stock : count
+        }
+        axios.put (`${apiProductTransaction}/product/stock/${prod_id}` ,editStok)
+        .then (result => {
+            if (result.error) {
+                console.log(result)
+
+            } else {
+                if (result) {
+                    // alert(count)
+                    // // setCartQuantity('')
+                    // setCartTotal('')
+                    // setCartWeight('')
+                    // setCartProdId('')
+
+
+
+                }
+            } 
+        })
+        .catch((e) => {
+            setError(e.response.message)
+        })
+        
         const data = {
             clit_subweight: count * Number(Product.prod_weight),
             clit_subtotal: count * Number(Product.prod_price),
-            clit_prod_id: 1511,
+            clit_prod_id: prod_id,
             clit_qty: count,
             clit_stat_name: 'PENDING'
 
@@ -87,11 +103,13 @@ export default function Product() {
 
 
                         }
-                    } history.push('/cart')
+                    } 
+                    history.push('/cart')
                 })
                 .catch((e) => {
                     setError(e.response.message)
                 })
+                
         }
         else {
 
@@ -112,20 +130,48 @@ export default function Product() {
 
 
                         }
-                    } history.push('/cart')
+                    } 
+                    history.push('/cart')
                 })
                 .catch((e) => {
                     setError(e.response.message)
                 })
         }
+       
     }
 
     const klikkeranjang = (x) => {
         x.preventDefault()
+        
+        const editStok = {
+            prod_stock : count
+        }
+        axios.put (`${apiProductTransaction}/product/stock/${prod_id}` ,editStok)
+        .then (result => {
+            if (result.error) {
+                console.log(result)
+
+            } else {
+                if (result) {
+                    // alert(count)
+                    // // setCartQuantity('')
+                    // setCartTotal('')
+                    // setCartWeight('')
+                    // setCartProdId('')
+
+
+
+                }
+            } 
+        })
+        .catch((e) => {
+            setError(e.response.message)
+        })
+
         const data = {
             clit_subweight: count * Number(Product.prod_weight),
             clit_subtotal: count * Number(Product.prod_price),
-            clit_prod_id: 1511,
+            clit_prod_id: prod_id,
             clit_qty: count,
             clit_stat_name: 'PENDING'
 
@@ -149,7 +195,8 @@ export default function Product() {
 
 
                         }
-                    } notify()
+                    } window.location.reload()
+                    notify()
                 })
                 .catch((e) => {
                     setError(e.response.message)
@@ -194,6 +241,22 @@ export default function Product() {
                 .catch((err) => console.error(err));
         }
         fetchProduct()
+        async function fetchCart() {
+            return await axios({
+                url: `${apiCart}/cart/${acco_id}`,
+                method: 'GET'
+            }).then((result) => setCartId(result.data[0].cart_id))
+                .catch((err) => console.log(err));
+        }
+        fetchCart()
+        async function fetchImg() {
+            return await axios({
+                url: `${apiProductTransaction}/productImages/${primId}`,
+                method: 'GET'
+            }).then((result) => setSelectetImg(result.data.prim_path))
+                .catch((err) => console.log(err));
+        }
+        fetchImg()
     }, [])
 
     useEffect(() => {
@@ -221,17 +284,15 @@ export default function Product() {
         }
     }, [Product])
 
-    useEffect(() => {
-        axios({
-            url: `${apiUserAccount}/api/account/1001`,
-            method: "get",
-            headers: {
-                "Content-type": "application/json"
-            }
-        }).then((res) => setAccount(res.data))
-            .catch((err) => console.error(err));
-        console.log(Account)
-    }, [])
+    var option = {
+        // width : 400,
+        // height : 250,
+        // zoomWidth:500,
+        // offset: auto,
+        // scale: 1.5
+        opacity: 0.1
+    }
+    new ImageZoom (document.getElementById("zoom"),option)
 
 
 
@@ -240,10 +301,16 @@ export default function Product() {
             <>
                 <div>
                     <div className="flex flex-wrap rounded-lg shadow py-5 mb-5 border-4 border-pink-500" >
-                        <div className="w-1/2 sm:w-1/3 product">
+                        <div className="z-10 w-1/2 sm:w-1/3 product "id ="zoom">
+                            
                             <img src={selectedImg} alt="Selected"
+                            // style={{ cursor: 'pointer' }}
                                 className="selected"
+                            // onClick={fotoproduct}
                             />
+                            
+                            
+                            
                             {/* <div className=" imgContainer">
                             {Images.map((img, index) => (
                                 <img className="product-image"
@@ -308,9 +375,8 @@ export default function Product() {
                                 </svg>
                             </div>
 
-                            <div class="w-5/15 item-center text-sm font-medium text-pink-500 dark:text-gray-300 mt-2 underline">540 Penilaian</div>
-
-                            <div class="w-4/12 ml-5 item-center text-sm font-medium text-pink-500 dark:text-gray-300 mt-2 underline">120 RB Terjual</div>
+                            <div class="w-5/15 item-center text-sm font-medium text-pink-500 dark:text-gray-300 mt-2 underline">{penilaian} Penilaian</div>
+                            <div class="w-4/12 ml-5 item-center text-sm font-medium text-pink-500 dark:text-gray-300 mt-2 underline">{terjual} RB Terjual</div>
                             {/* <div className="w-4/12 mb-5">Harga</div> */}
                             <div className="w-full mb-5 text-4xl text-pink-500" values="Color">{convertToRupiah(Product.prod_price)}</div>
                             <div className="w-4/12">Warna</div>
@@ -366,10 +432,10 @@ export default function Product() {
                         </a>
                                 </div>
                                 <div class="w-6/12">
-                                    <a href="#" class="uppercase py-2 px-4 rounded-lg bg-pink-500 border-2 border-pink-500 text-white text-md mr-4 hover:bg-transparant 400"
-                                        values="klikCart" onClick={klikCart}>
+                                    <button  class="uppercase py-2 px-4 rounded-lg bg-pink-500 border-2 border-pink-500 text-white text-md mr-4 hover:bg-transparant 400"
+                                        values="klikCart" onClick={klikCart} disabled={Product.prod_stock<6}>
                                         BELI SEKARANG
-                        </a>
+                        </button>
                                 </div>
                             </div>
                         </div>

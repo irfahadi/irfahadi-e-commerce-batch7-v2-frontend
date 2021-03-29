@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
+import { stubString } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import ModalDelete from "../../components/modal/ModalDelete"
@@ -201,7 +202,9 @@ export default function Cart() {
           "Content-Type": "application/json",
         },
       })
-        .then(() => history.push("/cart-orders"))
+        .then(() => {
+          setOrder({})
+          return history.push("/cart-orders")})
           // return fetchCart())
         .catch((err) => console.error(err));
     }else{
@@ -271,7 +274,7 @@ export default function Cart() {
                     <div className="h-20 w-20 m-2 rounded border border-solid border-white">
                       <img src={x.product.product_images[0]?.prim_path} alt="product" />
                     </div>
-                    <div>{x.product.prod_desc}</div>
+                    <div>{x.product.prod_desc.substring(0,20)}</div>
                   </div>
                   <div>Rp. {numberWithCommas(x.product.prod_price)}</div>
                     <div className="flex flex-row">

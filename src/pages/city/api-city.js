@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { apiUserMaster } from '../../config/apiUrl'
+import { apiUserMaster, apiUserAccount } from '../../config/apiUrl'
 
 
 
@@ -7,7 +7,7 @@ import { apiUserMaster } from '../../config/apiUrl'
 
 const listCity = async () => {
     try {
-        let response = await axios.get(`${apiUserMaster}/city/`)
+        let response = await axios.get(`${apiUserAccount}/city/`)
         return await response.data
     }   catch(err){
         return await err.message
@@ -18,7 +18,7 @@ const listCity = async () => {
 // di backend, jangan lupa pake req.body.data, agar bisa di extract ke tiap attribute
 const create = async (city) => {
     try {
-        let response = await axios.post(`${apiUserMaster}/city/`,{
+        let response = await axios.post(`${apiUserAccount}/city/`,{
           data : city
         })
         return await response.data
@@ -29,7 +29,7 @@ const create = async (city) => {
   
   const deleteCity = async (cityId) => {
     try {
-        let response = await axios.delete(`${apiUserMaster}/city/${cityId}`)
+        let response = await axios.delete(`${apiUserAccount}/city/${cityId}`)
         return await response.data
       } catch(err) {
         return await err.message
@@ -38,7 +38,7 @@ const create = async (city) => {
   
   const updateCity = async (city) => {
     try {
-        let response = await axios.put(`${apiUserMaster}/city/${city.city_id}`,{
+        let response = await axios.put(`${apiUserAccount}/city/${city.city_id}`,{
           data : city
         })
         return await response.data

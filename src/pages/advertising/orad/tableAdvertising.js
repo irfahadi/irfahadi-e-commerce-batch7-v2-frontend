@@ -32,12 +32,13 @@ export const TableAdvertising = props => {
                     <table className="items-center w-full bg-transparent border-collapse">
                         <thead>
                             <tr>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Created On</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Publish On</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Finished On</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Bill Amount</th>
+                               <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Order Advertising ID</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold ttext-center">Created On</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Publish On</th>
+                                {/* <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Finished On</th> */}
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Bill Amount</th>
                                 <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Status</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Pack Name</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Pack Name</th>
                             </tr>
                         </thead>
                         <br />
@@ -46,9 +47,10 @@ export const TableAdvertising = props => {
                                 props.adv.length > 0 ?
                                     props.adv.map((adv, index) => {
                                         return (<tr key={index} >
+                                            <td className="text-center">{adv.orad_id}</td>
                                             <td className="text-center">{adv.orad_created_on}</td>
                                             <td className="text-center">{adv.orad_publish_on}</td>
-                                            <td className="text-center">{adv.orad_finished_on}</td>
+                                            {/* <td className="text-center">{adv.orad_finished_on}</td> */}
                                             <td className="text-center">{adv.orad_bill_amount}</td>
                                             <td className="text-center">{adv.orad_stat_name}</td>
                                             <td className="text-center">{adv.orad_pack_name}</td>

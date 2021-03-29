@@ -76,38 +76,48 @@ export const EditBrand = () => {
     }
     return (
         // <!-- component -->
-        <div class="max-w-lg max-w-xs bg-primary shadow-2xl rounded-lg mb-5 mx-auto text-center py-12 mt-4 rounded-xl">
-            <h1 class="text-white text-center font-extrabold -mt-3  text-3xl">Edit Brand</h1>
-            <div class="container py-5 max-w-md mx-auto">
-                <form onSubmit={editBrand}>
-                    <div class="mb-4">
-                        <input placeholder="name"
-                            value={brand_name}
-                            onChange={OnChangeBrandName}
-                            class="shadow appearance-none h-16 text-lg rounded w-full 
+        <div class="flex flex-col items-center justify-center my-10 ">
+            <div class="flex flex-col bg-white border-t-2 border-primary  shadow-md  px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
+
+
+                <h1 class="font-medium self-left text-4xl sm:text-3xl  text-black">Edit Brand</h1>
+                <span class="self-left">Changes you make will be visible to others brands</span>
+                <div class="relative mt-7 h-px bg-gray-300">
+                    <div class="absolute left-0 top-0 flex justify-center w-full -mt-2">
+                        <span class="bg-white px-4 text-xs text-gray-500 uppercase"></span>
+                    </div>
+                </div>
+                <div class="mt-6 mx-4">
+                    <form onSubmit={editBrand}>
+                        <div class="mb-4">
+                            <input placeholder="name"
+                                value={brand_name}
+                                onChange={OnChangeBrandName}
+                                class="shadow appearance-none h-16 text-lg rounded w-full 
                             py-2 px-3 text-gray-700 leading-tight 
                             focus:outline-none focus:shadow-outline"
-                            id="brandName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
-                    </div>
-                    {error.text && <p>{error.text.message}</p>}
+                                id="brandName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
+                        </div>
+                        {error.text && <p>{error.text.message}</p>}
 
-                    <div class="flex items-center justify-end gap-2">
-                        <Link
-                            onClick={editBrand}
-                            value="editBrand"
+                        <div class="flex flex-row-reverse  gap-2">
+                            <Link
+                                onClick={editBrand}
+                                value="editBrand"
 
-                            class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in"
-                        >
-                            Submit
+                                class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in"
+                            >
+                                Submit
                   </Link>
-                        <Link class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in"
-                            type="button" to="/brand">
+                            <Link class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in"
+                                type="button" to="/brand">
 
-                            Cancel
+                                Cancel
                         </Link>
 
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 

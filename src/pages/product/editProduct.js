@@ -449,7 +449,7 @@ export default function EditProduct(props) {
                 </option>
                             {Condition.map((y) => {
                                 return (
-                                    <option value={y.cond_name}>{y.cond_desc}
+                                    <option value={y.cond_name}>{y.cond_name}
 
                                     </option>)
                             })}

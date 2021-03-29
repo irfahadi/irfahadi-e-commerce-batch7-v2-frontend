@@ -143,7 +143,7 @@ const UbahPassword = (props) => {
                   ? "col-span-2 flex-1 appearance-none border border-red-300 py-2 px-4 bg-white text-gray-700 rounded-lg placeholder-red-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent mb-2"
                   : "col-span-2 flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 rounded-lg placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent mb-2"
               }
-              placeholder="Mohon masukkan password lagi"
+              placeholder="Mohon konfirmasi password baru"
               value={confirmPassword}
               onChange={changeConfirmPassword}
             />
@@ -153,7 +153,7 @@ const UbahPassword = (props) => {
           </div>
           <div className="flex justify-center items-baseline">
             <button
-              className="mt-4 bg-gray-700 hover:bg-gray-800 text-white py-2 px-6 rounded-lg flex justify-center items-baseline"
+              className="mt-4 bg-white text-pink-600 hover:bg-pink-600 hover:text-white border-2 border-pink-600 py-2 px-6 rounded-lg flex justify-center items-baseline"
               values="daftarAccount"
               onClick={simpan}
             >

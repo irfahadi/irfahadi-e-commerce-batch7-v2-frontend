@@ -10,6 +10,7 @@ module.exports = {
           buttonOff: '#e6ccb2',
           button: '#aee1e1',
           table : '#d3e0dc',
+          pastel : '#fff5f9'
           
         },
       }

@@ -5,7 +5,7 @@ import React, { useState, useEffect, Alert } from 'react';
 import { useHistory } from "react-router";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
-import _ from "lodash"
+// import _ from "lodash"
 import ReactPaginate from "react-paginate";
 import Pagination from "../../components/pagination/pagination";
 
@@ -100,12 +100,7 @@ function Condition(props) {
 
     return (
         <>
-            <div class="container gap-8 justify-center  flex flex-row flex-wrap   text-2xl uppercase rounded ">
-                <Link to="/productSaya" class="w-50 bg-primary text-white font-bold hover:text-pink-600  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white  shadow-md py-2 px-6 inline-flex items-center">Product</Link>
-                <Link to="/brand" class="w-50 bg-primary text-white font-bold hover:text-pink-600  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white  shadow-md py-2 px-6 inline-flex items-center">Brand</Link>
-                <Link to="/category" class="w-50 bg-primary text-white font-bold hover:text-pink-600  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white  shadow-md py-2 px-6 inline-flex items-center">Category</Link>
-                <Link to="/condition" class="w-50 bg-primary text-white font-bold hover:text-pink-600  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white  shadow-md py-2 px-6 inline-flex items-center">Condition</Link>
-            </div>
+          
 
             <body class="antialiased font-sans mt-4 ">
                 <div class="container mx-auto px-4 sm:px-8">

@@ -51,7 +51,7 @@ export default function TambahProduct() {
 
 
     const onCLickBackProduct = () => {
-        history.push('/productsaya')
+        history.push('/product')
     }
 
     const onChangeProductName = (e) => {
@@ -183,7 +183,7 @@ export default function TambahProduct() {
                         
                         
                         const dataVariant = {
-                            prova_name: prova_name,
+                            prova_name: "WARNA",
                             prova_option: prova_option,
                             prova_prod_id: result.data.prod_id
                         }
@@ -209,7 +209,7 @@ export default function TambahProduct() {
                                 setError(e)
                             })
                             const dataVariant2 = {
-                                prova_name:prova_nameSize,
+                                prova_name:"SIZE",
                                 prova_option:prova_optionSize,
                                 prova_prod_id: result.data.prod_id
                             }
@@ -257,7 +257,7 @@ export default function TambahProduct() {
                                 })
                             
                     } notify()
-                } history.push('/productsaya')
+                } history.push('/product')
             })
             .catch((e) => {
                 setError(e.response.message)
@@ -394,7 +394,7 @@ export default function TambahProduct() {
                 </option>
                             {Condition.map((y) => {
                                 return (
-                                    <option value={y.cond_name}>{y.cond_desc}
+                                    <option value={y.cond_name}>{y.cond_name}
 
                                     </option>)
                             })}
@@ -423,15 +423,15 @@ export default function TambahProduct() {
                         </div>
                     </div>
                     <div className="w-4/12 ml-5 text base">
-                        Nama Variant (WARNA)
+                        Variant Warna
                 </div>
                     <div className="w-6/12">
-                        <div class=" relative ">
+                        {/* <div class=" relative ">
                             <input type="text" id="simple-email" class=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 rounded-lg placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent mb-2"
                                 placeholder="Mohon masukkan WARNA"
                                 value={prova_name}
                                 onChange={onChangeProvaName} />
-                        </div>
+                        </div> */}
                     </div>
                     <div className="w-4/12 ml-5 text base">
                         Option Warna
@@ -445,15 +445,15 @@ export default function TambahProduct() {
                         </div>
                     </div>
                     <div className="w-4/12 ml-5 text base">
-                        Nama Variant (SIZE)
+                        Variant SIZE
                 </div>
                     <div className="w-6/12">
-                        <div class=" relative ">
+                        {/* <div class=" relative ">
                             <input type="text" id="simple-email" class=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 rounded-lg placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent mb-2"
                                 placeholder="Mohon masukkan SIZE"
                                 value={prova_nameSize}
                                 onChange={onChangeProvaNameSize} />
-                        </div>
+                        </div> */}
                     </div>
                     <div className="w-4/12 ml-5 text base">
                         Option Size

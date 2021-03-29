@@ -31,26 +31,30 @@ export const TableAdvertising = props => {
                 <div className="block w-full overflow-x-auto">
                     <table className="items-center w-full bg-transparent border-collapse">
                         <thead>
-                            <tr>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Total Duration</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Total Amount</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Curent Duration</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Current Amount</th>
-                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">Status</th>
+                            <tr>    
+                               <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Order Advertising Product ID</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Total Duration</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Total Amount</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Curent Duration</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Current Amount</th>
+                                <th className=" px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-center">Status</th>
                             </tr>
                         </thead>
                         <br />
                         <tbody >
                             {
                                 props.adv.length > 0 ?
-                                    props.adv.map((adv, index) => {
-                                        return (<tr key={index} >
-                                            <td className="text-center">{adv.orap_total_duration}</td>
-                                            <td className="text-center">{adv.orap_total_amount}</td>
-                                            <td className="text-center">{adv.orap_current_durtion}</td>
-                                            <td className="text-center">{adv.orap_current_amount}</td>
-                                            <td className="text-center">{adv.orap_stat_name}</td>
+                                    props.adv.map((adv) => {
+                                        return adv.order_advertising_products.map(x =>{
+                                        return (<tr  >
+                                            <td className="text-center">{x.orap_id}</td>
+                                            <td className="text-center">{x.orap_total_duration}</td>
+                                            <td className="text-center">{x.orap_total_amount}</td>
+                                            <td className="text-center">{x.orap_current_duration}</td>
+                                            <td className="text-center">{x.orap_current_amount}</td>
+                                            <td className="text-center">{adv.orad_stat_name}</td>
                                         </tr>)
+                                        })
                                     }) :
                                     <tr>
                                         <td colSpan={3}>No Records Found.</td>
