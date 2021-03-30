@@ -246,7 +246,7 @@ function Index() {
     return (
         <div>
             <div class="flex flex-wrap justify-center " >
-				<div class="mx-5 my-2   bg-blue-400 rounded-md shadow-md overflow-hidden" onClick={onModalOrderDikirim}>
+				<div class="mx-5 my-2   bg-blue-400 rounded-md shadow-md overflow-hidden cursor-pointer" onClick={onModalOrderDikirim}>
 				{/* <Link onClick={()=> DetailProduct(prod.prod_id, prod.product_images[0].prim_id)}> */}
 					<div class="px-5 py-3">
 						<h3 class="text-white text-l ">Order Dikirim </h3>
