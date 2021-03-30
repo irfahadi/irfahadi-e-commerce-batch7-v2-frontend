@@ -362,7 +362,7 @@ function Index() {
                                             filter===false ? (OrderShipping.filter((val)=>{
                                                     if(search == ""){
                                                         return val
-                                                    } else if (val.order_name.toLowerCase().includes(search.toLocaleLowerCase())){
+                                                    } else if (val.order_name.toLowerCase().includes(search)){
                                                         return val
                                                     } 
                                                 }).filter((x)=> x.order_stat_name !== "CHECKOUT" && x.order_stat_name !== "CANCELLED" && x.order_acco_id_seller == localStorage.getItem('dataAccountId')).map((x)=>{
