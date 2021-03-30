@@ -166,6 +166,11 @@ const getOrderToCancel = async (e) => {
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 align-middle inline-block min-w-full mb-6 sm:px-6 lg:px-8">
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <button
+              className='mb-2 bg-pink-200 rounded-lg px-1 py-1 border-2 border-pink-100 hover:bg-pink-300 hover:border-pink-200'
+              onClick={fetchMyOrders}
+              >Refresh
+              </button>
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>

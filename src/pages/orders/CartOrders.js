@@ -2,6 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Orders from "./Orders";
 import { Redirect } from "react-router-dom";
+import swal from 'sweetalert';
+import {TopUpWallet} from '../payment/TopUpWallet'
+import {apiPayment} from '../../config/apiUrl'
+
 
 import { numberWithCommas } from "../../utils/utils";
 import {
@@ -58,9 +62,23 @@ export default function CartOrders() {
   };
 
   const notifyErr = () => {
-    toast.error("Saldo Kurang : Rp. " + numberWithCommas(saldo), {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000,
+    
+    // ---
+
+    swal({
+      title: "Saldo Kurang! Saldo anda Rp. "  + numberWithCommas(saldo),
+      text: "Silahkan isi saldo lebih dulu!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willTopup) => {
+      if (willTopup) {
+        swal("Silahkan Topup");
+        history.push('/wallet')
+      } else {
+       
+      }
     });
   };
 

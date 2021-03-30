@@ -40,18 +40,13 @@ export const TableUsers = props => {
                                             <td className="text-center">{localStorage.getItem('dataUserEmail')}</td>
                                             <td className="text-center">{localStorage.getItem('dataUserPass')}</td> */}
                                             <td className="text-center">
-                                                <button onClick= {() => {
-props.setEdit(users)
-                                                }}
-                                                    className="text-gray-600 bg-transparent border border-solid border-gray-300 hover:bg-gray-600 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                                                    Edit
-                                    </button>
+                                                
                                                 <button onClick = { () => {
                                                     if (window.confirm("apakah anda yakin ingin menghapus data ini?")) {
                                                         props.setDelete(users.user_id);
                                                       }
                                                 }}
-                                                    className="text-gray-600 bg-transparent border border-solid border-gray-300 hover:bg-gray-600 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                                    className="text-white bg-red-500 border border-solid border-gray-300 hover:bg-red-600 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                                                     Delete
                                     </button>
                                             </td>

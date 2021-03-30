@@ -183,9 +183,9 @@ export default function Navbar({ fixed }) {
           </svg>
           <span class="mx-1 text-sm">NY</span> */}
         </div>
-        <a href="/" class="w-4/6 ml-48 md:text-center text-2xl font-semibold absolute">
+        <a href="/" class="w-3/6 ml-10 text-center md:text-right sm:text-left text-2xl font-semibold absolute">
           E-Commerce
-            </a>
+        </a>
         <div class="flex items-center justify-end w-full lg:gap-2">
           <div
             className={
@@ -225,6 +225,8 @@ export default function Navbar({ fixed }) {
                       ) : (null)}
                     </div>
                   </div>
+
+                  {hitungCart? (
 
                   <ul className="dropdown-menu absolute hidden text-gray-700 ">
                     <li className="origin-top-right absolute -right-5 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -269,6 +271,7 @@ export default function Navbar({ fixed }) {
                       </table>
                     </li>
                   </ul>
+                          ): (null)}
                 </li>
               </ul>
 
@@ -286,13 +289,13 @@ export default function Navbar({ fixed }) {
                       <span className="mr-1 font-semibold capitalize">{localStorage.getItem('dataUserName')}
                       </span>
                     </button>
-                    <ul className="dropdown-menu absolute hidden text-gray-700 pt-1">
-                      <li className=" bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" onClick={() => history.push('/dashboarduser')} style={{ cursor: 'pointer' }}>
+                    <ul className="dropdown-menu hidden absolute text-gray-700 pt-1">
+                      <li className=" bg-gray-200 hover:bg-pastel py-2 px-4 block whitespace-no-wrap " onClick={() => history.push('/dashboarduser')} style={{ cursor: 'pointer' }}>
                         {/* <a className="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="/dashboarduser"> */}
                       Profil
                       {/* </a> */}
                       </li>
-                      <li className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" onClick={() => history.push('/dashboard')} style={{ cursor: 'pointer' }}>
+                      <li className="bg-gray-200 hover:bg-pastel py-2 px-4 block whitespace-no-wrap" onClick={() => history.push('/dashboard')} style={{ cursor: 'pointer' }}>
                         {/* <a className="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="/dashboard"> */}
                       Dashboard
                       {/* </a> */}
