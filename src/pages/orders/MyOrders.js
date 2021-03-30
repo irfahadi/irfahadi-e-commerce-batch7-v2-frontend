@@ -10,11 +10,13 @@ import {ModalCancelOrder} from './ModalCancelOrder'
 
 export default function MyOrders() {
   let history = useHistory();
-  let [modalCancel,setModalCancel] = useState(false)
   let [modal, setModal] = useState(false);
   let [dataFormOrderArrival, setDataFormArrival] = useState({});
-  let [orderToCancel,setOrderToCancel] = useState('')
   const [MyOrders, setMyOrders] = useState();
+  const [refresh,setRefresh] = useState()
+
+  let [modalCancel,setModalCancel] = useState(false)
+  let [orderToCancel,setOrderToCancel] = useState('')
   const [status, setStatus] = useState();
   const [accId, setaccId] = useState(localStorage.getItem("dataAccountId"));
   const [data, setData] = useState({
@@ -30,7 +32,7 @@ export default function MyOrders() {
     // fetchMyOrders();
     fetchFilterOrders();
     fetchMyOrders()
-  }, [modal, dataFormOrderArrival, status, showPayment,modalCancel]);
+  }, [modal, dataFormOrderArrival, status, showPayment,modalCancel,refresh]);
 
   const fetchMyOrders = async () => {
     let res = await axios({
@@ -114,10 +116,10 @@ export default function MyOrders() {
 
   const onCancel = async () => {
     try {
-        await axios.post(`${apiPayment}/orders/cancel`,{order_name:orderToCancel})
+        
+        await axios.post(apiPayment+"/orders/cancel",{order_name:orderToCancel})
         setModalCancel(false)
     } catch (error) {
-
         console.log(error)
     }
 }
@@ -314,9 +316,6 @@ const getOrderToCancel = async (e) => {
                         </>
                       ))
                     :null
-                  //   <tr>
-                  //   <td colSpan={3}>No Records Found.</td>
-                  // </tr>
                   }
                 </tbody>
               </table>
@@ -326,8 +325,10 @@ const getOrderToCancel = async (e) => {
         {modal ? (
           <ModalMyOrders
             setModal={setModal}
+            setRefresh={setRefresh}
             setDataFormArrival={setDataFormArrival}
             dataFormOrderArrival={dataFormOrderArrival}
+            refresh={refresh}
           />
         ) : null}
         {modalCancel ? (

@@ -17,7 +17,6 @@ import CheckoutMyCart from './pages/orders/CheckoutMyCart'
 import CheckoutMyOrder from './pages/orders/CheckoutMyOrder'
 import CartOrders from './pages/orders/CartOrders'
 import AfterOrders from './pages/orders/AfterOrders'
-import MyOrders from './pages/orders/MyOrders'
 import Province from './pages/province/province'
 import City from './pages/city/city'
 import Users from './pages/users/users'
@@ -83,7 +82,7 @@ import OrderSK from './pages/admin/orderSK';
 import FilesUpload from "./components/FilesUpload";
 // import EditAddress from './pages/address/EditAddress';
 import ReCaptchaSignup from './pages/users/reCaptcha';
-// import MyOrders from './pages/orders/MyOrders';
+import MyOrders from './pages/orders/MyOrders';
 import DashboardOrder from './pages/users/DashboardOrder';
 import Penjualanku from './pages/users/Pembelianku';
 import Pembelianku from './pages/users/Pembelianku';
@@ -91,9 +90,6 @@ import IndexAdmin from './pages/admin/indexAdmin'
 import TotalOrderBK from './pages/admin/totalOrderBK';
 import TotalProdBK from './pages/admin/totalProdBK';
 import TotalProdSK from './pages/admin/totalProdSK';
-
-
-
 
 function App() {
   const dispatch = useDispatch()
@@ -131,7 +127,6 @@ function App() {
           {/* end Category */}
           <Route path="/cart" component={Cart} />
           <Route path="/cart-orders" component={CartOrders} />
-          {/* <Route path="/orders/ordered-product" component={OrderedProduct}/> */}
           <Route path="/orders" component={Orders}/>
           <Route path="/login" component={Login} />
           <Route path="/daftar" component={Daftar} />
@@ -193,8 +188,6 @@ function App() {
           <Route path="/summaryPDAM" component={SummaryPDAM}/>
           <Route path="/upload" component={FilesUpload}/>
           <Route path="/editAddress" component={EditAddress}/>
-
-
           <Route path="/order-kw" component={OrdersKw}/>
           <Route path="/wallet-bank" component={WalletAndBank}/>
 

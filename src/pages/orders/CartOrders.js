@@ -23,8 +23,7 @@ import { toast } from "react-toastify";
 
 export default function CartOrders() {
   let history = useHistory();
-  const cart_id = localStorage.getItem("cart_id")
-  const [CartOrders, setCartOrders] = useState([]);
+  const [CartOrders, setCartOrders] = useState({});
   const [accId, setaccId] = useState(localStorage.getItem("dataAccountId"));
   const [accIdProd, setaccIdProd] = useState([]);
   const [accIdSeller, setaccIdSeller] = useState([]);
@@ -130,7 +129,7 @@ export default function CartOrders() {
 
   const fetchCartOrders = async () => {
     return await axios({
-      url: `${apiCart}/cart/${accId}/CHECKOUT/${cart_id}`,
+      url: `${apiCart}/cart/${accId}/CHECKOUT`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
@@ -150,17 +149,20 @@ export default function CartOrders() {
   };
 
   const fetchAddress = async () => {
-    let result = await axios({
-      url: `${apiUserAccount}/address/search/${accId}`,
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    // console.log(result.data[0].acco_nama)
-    setAddress(result.data[0]);
-
-    setCityTo(result.data[0].city_name);
+    try {
+      let result = await axios({
+        url: `${apiUserAccount}/address/search/${accId}`,
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      // console.log(result.data[0].acco_nama)
+      setAddress(result.data[0]);
+      setCityTo(result.data[0].city_name); 
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const fetchAddressProd = async () => {
@@ -246,12 +248,17 @@ export default function CartOrders() {
         order_line_items: [],
         // ongkir : ongkir,
       };
-      CartOrders.cart_line_items.map((x) =>
+      CartOrders.cart_line_items.map((x) =>{
+        x.cart_stat_name='CLOSED'
         orders.order_line_items.push(JSON.stringify(x))
-      );
-      console.log(orders);
+      });
+      // console.log(orders);
+      deleteCart(CartOrders.cart_id);
       createOrders(orders);
-      history.push('/checkout-mycart')
+      setTimeout(()=>{
+        history.push('/checkout-mycart')
+      },1000)
+      
 
     }
   };

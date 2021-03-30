@@ -11,7 +11,7 @@ const ModalCancelOrder = (props) => {
                         <div className=" px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left ">
                                 <h1>Apakah Anda Yakin ?</h1>
-                                <button onClick={props.onCancel} className="py-1 mx-1 px-4 bg-primary text-white rounded-lg w-100">Ya</button>
+                                <button onClick={()=>props.onCancel()} className="py-1 mx-1 px-4 bg-primary text-white rounded-lg w-100">Ya</button>
                                 <button onClick={()=>props.setModalCancel(false)} className="py-1 mx-1 px-4 bg-primary text-white rounded-lg w-100">Tidak</button>
                             </div>
                         </div>

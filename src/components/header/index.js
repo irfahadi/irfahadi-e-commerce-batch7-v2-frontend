@@ -385,12 +385,8 @@ export default function Navbar({ fixed }) {
           <a class=" lg:inline-flex text-lg sm:mx-2 sm:mt-0 px-3 py-2 rounded hover:text-black hover:bg-pink-100" href="/product">Product</a> */}
         </div>
       </nav>
-
-
         )
       }
-
-
     </div >
   );
 }

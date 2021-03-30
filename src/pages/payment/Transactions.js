@@ -56,6 +56,22 @@ const Transactions = (props) => {
         }
     }
 
+    const getFromWallet = (x) => {
+      try {
+          return x.watr_numbers.split("-")[0]
+      } catch (error) {
+          console.log(error)
+      }
+    }
+
+    const getToWallet = (x) => {
+      try {
+          return x.watr_numbers.split("-")[1]
+      } catch (error) {
+          console.log(error)
+      }
+    }
+
     useEffect(()=>{
         switch (Number(selectedFilter)) {
             case 1:
@@ -108,8 +124,8 @@ const Transactions = (props) => {
                                     return (
                                         <tr className=" text-gray-800 bg-white rounde-xl font-thin overflow-hidden">
                                             <td className="py-3">{x.watr_date}</td>
-                                            <td>{x.watr_wale_id}</td>
-                                            <td>{x.watr_acc_target}</td>
+                                            <td>{getFromWallet(x)}</td>
+                                            <td>{getToWallet(x)}</td>
                                             <td>Rp. {fixNotation(x.watr_credit)}</td>
                                             <td>Rp. {fixNotation(x.watr_debet)}</td>
                                             <td>{x.watr_numbers}</td>

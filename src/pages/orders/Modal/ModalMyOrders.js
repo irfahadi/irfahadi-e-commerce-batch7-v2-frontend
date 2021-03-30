@@ -1,8 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from "react";
-import { apiOrder } from "../../../config/apiUrl";
+import { apiOrder, apiPayment } from "../../../config/apiUrl";
 
-function ModalMyOrders({ setModal, dataFormOrderArrival }) {
+function ModalMyOrders({ setModal, dataFormOrderArrival, refresh,setRefresh }) {
   let [orderName, setOrderName] = useState(dataFormOrderArrival.order_name);
   let [orderStatName, setOrderStatName] = useState("CLOSED");
 
@@ -17,19 +17,10 @@ function ModalMyOrders({ setModal, dataFormOrderArrival }) {
       order_name: orderName,
       order_stat_name: orderStatName,
     };
-    await axios
-      .put(`${apiOrder}/orders`, data)
-      .then((result) => {
-        if (result) {
-          console.log(result.data);
-          setModal(false);
-        }
-
-        console.log(result.data);
-        return 0;
-      })
-      .catch((err) => err.message);
-  };
+    await axios.put(apiPayment+"/orders/finish",{order_name:data.order_name})
+    setRefresh(!refresh)
+    setModal(false)
+  }
 
   return (
     <div>
