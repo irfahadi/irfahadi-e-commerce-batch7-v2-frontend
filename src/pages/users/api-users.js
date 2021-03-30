@@ -6,7 +6,7 @@ import { apiUserMaster, apiUserAccount } from '../../config/apiUrl'
 
 const listUsers = async () => {
     try {
-        let response = await axios.get(`${apiUserAccount}/users/`)
+        let response = await axios.get(`${apiUserAccount}/users/all`)
         // console.log(response.data.message)
         
         console.log(response.data)

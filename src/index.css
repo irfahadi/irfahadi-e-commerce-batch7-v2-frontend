@@ -9,16 +9,21 @@
 .product-image{
     display: block;
     cursor: pointer;
+    opacity: 0.1;
 
 }
 .product{
     margin: auto;
     width: 100%;
-    max-width : 540px
+    max-width : 400px;
+    /* border: 1px solid #850000; */
+    /* offset: auto; */
+    position: relative
+    /* scale: 1.5 */
 }
 .product .selected {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
     margin: 0 auto;
     border : 4px grey
 }

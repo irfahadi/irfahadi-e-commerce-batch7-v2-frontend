@@ -32,8 +32,8 @@ const CheckoutOrders = () => {
                 className={
                   "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                   (openTab === 1
-                    ? "text-white bg-gray-600"
-                    : "text-gray-600 bg-white")
+                    ? "text-white bg-pink-600"
+                    : "text-black bg-white")
                 }
                 onClick={(e) => {
                   e.preventDefault();
@@ -42,8 +42,8 @@ const CheckoutOrders = () => {
                 data-toggle="tab"
                 href="#"
                 role="tablist"
-              >
-                My Cart
+               >
+                <span class="fa fa-shopping-cart"> My Cart</span>
               </a>
             </li>
             
@@ -52,8 +52,8 @@ const CheckoutOrders = () => {
                 className={
                   "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                   (openTab === 2
-                    ? "text-white bg-gray-600"
-                    : "text-gray-600 bg-white")
+                    ? "text-white bg-pink-600"
+                    : "text-black bg-white")
                 }
                 onClick={(e) => {
                   e.preventDefault();
@@ -63,7 +63,7 @@ const CheckoutOrders = () => {
                 href="#link2"
                 role="tablist"
               >
-                My Orders
+                <span class="fa fa-shopping-bag"> My Orders</span>
               </a>
             </li>
           </ul>

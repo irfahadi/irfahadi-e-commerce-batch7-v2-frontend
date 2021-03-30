@@ -28,6 +28,7 @@ const MyWallet = () => {
         if(acco_id !== undefined) {
           try {
             let walletData = await GetWallet(acco_id)
+            
             if(walletData.length > 0){
               await saldoToString(walletData[0])
               setWalletActivated(true)
@@ -102,7 +103,7 @@ const MyWallet = () => {
               <div>
                 <h4 className="mt-2 ml-2">ID Account: {wallet.acco_id}</h4>
                 <h4 className="ml-2">ID Wallet: {wallet.wale_id}</h4>                
-                <h4 className="ml-2">Saldo : Rp. {wallet.wale_saldo},00</h4>
+                <h4 className="ml-2">Saldo : Rp. {wallet.wale_saldo}</h4>
               </div>
             )
             :(

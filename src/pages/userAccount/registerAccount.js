@@ -1,24 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Upload from "./upload";
-import { apiUserMaster, apiUserAccount } from '../../config/apiUrl'
-
-
-
-
+import { apiUserMaster, apiUserAccount } from "../../config/apiUrl";
 
 export default function RegisterAccount() {
-
-
-
-  const AccountId = localStorage.getItem('dataAccountId');
-  const userName = localStorage.getItem('dataUserName');
-  const AccountNama = localStorage.getItem('dataUserName');
-  const AccountTelp = localStorage.getItem('dataAccountPhone');
-  const AccountShop = localStorage.getItem('dataAccountShopName');
-  const AccountGender = localStorage.getItem('dataAccountGender');
-  const AccountDate = localStorage.getItem('dataAccountBirthdate');
-  const user_id = localStorage.getItem('dataUserId');
+  const userName = localStorage.getItem("dataUserName");
+  console.log(userName);
+  const user_id = localStorage.getItem("dataUserId");
   const [value, setValue] = useState();
   const [isAccount, setisAccount] = useState(false)
   const [username, setUsername] = useState('');
@@ -37,149 +25,99 @@ export default function RegisterAccount() {
   const refresh = () => {
     // re-renders the component
     setValue({});
-}
+  };
 
-useEffect(() => {
-  // console.log(isAccount)
-  if (
-    localStorage.dataAccountId == null ||
-    localStorage.dataAccountId == undefined
-  ) {
-    setisAccount(false);
-    setValue({});
-  } else {
-    setisAccount(true);
-    setValue({});
-  }
-  setValue({});
-}, [localStorage.dataAccountId]);
-
-// const GetAccount = async () => {
-//   const response = await axios.get(`${apiUserAccount}/users/${user_id}`);
-//   return response.data;
- 
- 
-// };
-// console.log(GetAccount)
-
-// useEffect
-
-const uploadImage = async e => {
-  const files = e.target.files
-  const data = new FormData()
-  data.append('file', files[0])
-  data.append('upload_preset', 'andri2621')
-  setLoading(true)
-  const res = await fetch(
-    '	https://api.cloudinary.com/v1_1/codeid/image/upload',
-    {
-      method: 'POST',
-      body: data
+  useEffect(() => {
+    // console.log(isAccount)
+    if (
+      localStorage.dataAccountId == null ||
+      localStorage.dataAccountId == undefined
+    ) {
+      setisAccount(false);
+      setValue({});
+    } else {
+      setisAccount(true);
+      setValue({});
     }
-  )
-  const file = await res.json()
-
-  setImage(file.secure_url)
-  setLoading(false)
-}
-
-console.log(image)
-
+    setValue({});
+  }, [localStorage.dataAccountId]);
 
   const onChangeUsername = (e) => {
-    const value = e.target.value
-    setUsername(value)
-    setError('')
-}
+    const value = e.target.value;
+    setUsername(value);
+    setError("");
+  };
 
+  const onChangeNama = (e) => {
+    const value = e.target.value;
+    setNama(value);
+    setError("");
+  };
 
-const onChangeNama = (e) => {
-  const value = e.target.value
-  setNama(value)
-  setError('')
-}
+  const onChangePhone = (e) => {
+    const value = e.target.value;
+    setPhone(value);
+    setError("");
+  };
 
+  const onChangeShopName = (e) => {
+    const value = e.target.value;
+    setShopName(value);
+    setError("");
+  };
 
-const onChangePhone = (e) => {
-  const value = e.target.value
-  setPhone(value)
-  setError('')
-}
+  const onChangeGender = (e) => {
+    const value = e.target.value;
+    setGender(value);
+    setError("");
+  };
 
+  const onChangeBirthdate = (e) => {
+    const value = e.target.value;
+    setBirthdate(value);
+    setError("");
+  };
 
-const onChangeShopName = (e) => {
-  const value = e.target.value
-  setShopName(value)
-  setError('')
-}
+  const daftarAccount = () => {
+    const data = {
+      acco_username: userName,
+      acco_nama: nama,
+      acco_phone: phone,
+      acco_shopname: shopName,
+      acco_gender: gender,
+      acco_birthdate: birthdate,
+      acco_avatar: null,
+      acco_user_id: user_id,
+    };
 
-
-const onChangeGender = (e) => {
-  const value = e.target.value
-  setGender(value)
-  setError('')
-}
-
-
-const onChangeBirthdate = (e) => {
-  const value = e.target.value
-  setBirthdate(value)
-  setError('')
-}
-
-
-
-const daftarAccount = () => {
-  const data = {
-    acco_username: userName,
-    acco_nama: nama,
-    acco_phone: phone,
-    acco_shopname: shopName,
-    acco_gender: gender,
-    acco_birthdate: birthdate,
-    acco_avatar: image,
-    acco_user_id: user_id
-  }
-
-
-
-  
-
-  axios.post(`${apiUserMaster}/account/`, data)
-  .then(result => {
-      if ( result ) {
-          console.log(result.data)
+    axios
+      .post(`${apiUserAccount}/account`, data)
+      .then((result) => {
+        if (result) {
+          console.log(result.data);
           if (result.data) {
-              setUsername('')
-              setNama('')
-              setPhone('')
-              setShopName('')
-              setGender('')
-              setBirthdate('')
-              setAlert(result.data.message)
-              setTimeout (() => {
-              setAlert('')
-              localStorage.setItem('profilImage', image)
-              localStorage.setItem('dataAccountId', result.data.acco_id)
-              localStorage.setItem('dataAccountShopName', result.data.acco_shopname)
-              localStorage.setItem('dataAccountPhone', result.data.acco_phone)
-              localStorage.setItem('dataAccountBirthdate', result.data.acco_birthdate)
-              
-              }, 2500)
+            console.log(result.data)
+            localStorage.setItem("dataAccountId", result.data.data.acco_id);
+            localStorage.setItem("dataAccountShopName",result.data.data.acco_shopname);
+            localStorage.setItem("dataAccountPhone", result.data.data.acco_phone);
+            localStorage.setItem("dataAccountBirthdate",result.data.data.acco_birthdate);
+            setUsername("");
+            setNama("");
+            setPhone("");
+            setShopName("");
+            setGender("");
+            setBirthdate("");
+            setAlert(result.data.message);
+            setTimeout(() => {
+              setAlert("");
+            }, 2500);
           }
-      }
-  })
-  .catch (e => {
-      setError(e.response.data.message)
-  })
-}
-
-
-
-
-
-
-
+        }
+      })
+      .catch((e) => {
+        setError(e.response.data.message);
+      });
+  };
 
 return (
     <>
@@ -295,7 +233,7 @@ return (
             <div className="flex justify-center items-baseline">
               { isAccount ? (
             <button
-              className="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-lg flex justify-center items-baseline"
+              className="mt-4 bg-pink-500 text-white py-2 px-6 rounded-lg flex justify-center items-baseline"
               values="daftarAccount"
               // onClick={updateAccount}
             >
@@ -303,7 +241,7 @@ return (
             </button>
             ):(
               <button
-              className="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-lg flex justify-center items-baseline"
+              className="mt-4 bg-pink-500 text-white py-2 px-6 rounded-lg flex justify-center items-baseline"
               values="daftarAccount"
               onClick={daftarAccount}
             >

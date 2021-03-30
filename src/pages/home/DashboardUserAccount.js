@@ -23,11 +23,12 @@ import Account from "../userAccount/account";
 import Upload from "../userAccount/upload";
 import RegisterAccount from "../userAccount/registerAccount2";
 import UbahPassword from "../users/ubahpassword";
-import Address from "../address/address";
+// import Address fro../address/Addressess";
 
 import Profil2 from "../userAccount/profil2";
-import Address2 from "../address/address2";
+import Address from "../address/address";
 import MyWallet from "../payment/WalletAndBank";
+import DashboardOrder from "../users/DashboardOrder";
 const axios = require("axios");
 
 // const progress = 50;
@@ -82,8 +83,8 @@ const DashboardUserAccount = () => {
                   className={
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                     (openTab === 1
-                      ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                      ? "text-white bg-pink-600"
+                      : "text-pink-600 bg-white border-2 border-pink-600")
                   }
                   onClick={(e) => {
                     e.preventDefault();
@@ -96,18 +97,37 @@ const DashboardUserAccount = () => {
                   Profil
                 </a>
               </li>
-
               <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                 <a
                   className={
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                     (openTab === 2
-                      ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                      ? "text-white bg-pink-600"
+                      : "text-pink-600 bg-white border-2 border-pink-600")
                   }
                   onClick={(e) => {
                     e.preventDefault();
                     setOpenTab(2);
+                  }}
+                  data-toggle="tab"
+                  href="#/akun"
+                  role="tablist"
+                >
+                  Dashboard
+                </a>
+              </li>
+
+              <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <a
+                  className={
+                    "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
+                    (openTab === 3
+                      ? "text-white bg-pink-600"
+                      : "text-pink-600 bg-white border-2 border-pink-600")
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenTab(3);
                   }}
                   data-toggle="tab"
                   href="#/akun"
@@ -120,13 +140,13 @@ const DashboardUserAccount = () => {
                 <a
                   className={
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                    (openTab === 3
-                      ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                    (openTab === 4
+                      ? "text-white bg-pink-600"
+                      : "text-pink-600 bg-white border-2 border-pink-600")
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    setOpenTab(3);
+                    setOpenTab(4);
                   }}
                   data-toggle="tab"
                   href="#/alamat"
@@ -139,13 +159,13 @@ const DashboardUserAccount = () => {
                 <a
                   className={
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                    (openTab === 4
-                      ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                    (openTab === 5
+                      ? "text-white bg-pink-600"
+                      : "text-pink-600 bg-white border-2 border-pink-600")
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    setOpenTab(4);
+                    setOpenTab(5);
                   }}
                   data-toggle="tab"
                   href="#ubahpassword"
@@ -158,13 +178,13 @@ const DashboardUserAccount = () => {
                 <a
                   className={
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                    (openTab === 5
-                      ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                    (openTab === 6
+                      ? "text-white bg-pink-600"
+                      : "text-pink-600 bg-white border-2 border-pink-600")
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    setOpenTab(5);
+                    setOpenTab(6);
                   }}
                   data-toggle="tab"
                   href="#mywallet"
@@ -174,20 +194,28 @@ const DashboardUserAccount = () => {
                 </a>
               </li>
             </ul>
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-              <div className="px-4 py-5 flex-auto">
+            <div className="relative flex flex-col box-border min-w-0 border-2 border-pink-600 break-words bg-white w-full mb-6 shadow-lg rounde">
+              <div className="px-4 py-5 flex-auto ">
                 <div className="tab-content tab-space">
                   <div
                     className={openTab === 1 ? "block" : "hidden"}
                     id="link1"
                   >
-                    <div>
+                    <div className="">
                       <Profil2 />
+                    </div>
+                  </div>
+                  <div
+                    className={openTab === 2 ? "block" : "hidden"}
+                    id="link1"
+                  >
+                    <div className="">
+                      <DashboardOrder />
                     </div>
                   </div>
 
                   <div
-                    className={openTab === 2 ? "block" : "hidden"}
+                    className={openTab === 3 ? "block" : "hidden"}
                     id="link2"
                   >
                     <div>
@@ -195,7 +223,7 @@ const DashboardUserAccount = () => {
                     </div>
                   </div>
                   <div
-                    className={openTab === 3 ? "block" : "hidden"}
+                    className={openTab === 4 ? "block" : "hidden"}
                     id="link3"
                   >
                     <div>
@@ -203,7 +231,7 @@ const DashboardUserAccount = () => {
                     </div>
                   </div>
                   <div
-                    className={openTab === 4 ? "block" : "hidden"}
+                    className={openTab === 5 ? "block" : "hidden"}
                     id="link4"
                   >
                     <div>
@@ -211,7 +239,7 @@ const DashboardUserAccount = () => {
                     </div>
                   </div>
                   <div
-                    className={openTab === 5 ? "block" : "hidden"}
+                    className={openTab === 6 ? "block" : "hidden"}
                     id="link5"
                   >
                     <div>
@@ -234,7 +262,7 @@ const DashboardUserAccount = () => {
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                     (openTab === 1
                       ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                      : "text-pink-600 bg-white")
                   }
                   onClick={(e) => {
                     e.preventDefault();
@@ -254,7 +282,7 @@ const DashboardUserAccount = () => {
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                     (openTab === 2
                       ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                      : "text-pink-600 bg-white")
                   }
                   onClick={(e) => {
                     e.preventDefault();
@@ -273,7 +301,7 @@ const DashboardUserAccount = () => {
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                     (openTab === 3
                       ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                      : "text-pink-600 bg-white")
                   }
                   onClick={(e) => {
                     e.preventDefault();
@@ -292,7 +320,7 @@ const DashboardUserAccount = () => {
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
                     (openTab === 4
                       ? "text-white bg-gray-600"
-                      : "text-gray-600 bg-white")
+                      : "text-pink-600 bg-white")
                   }
                   onClick={(e) => {
                     e.preventDefault();

@@ -36,7 +36,7 @@ export const EditCond = () => {
     //     swal("Cancel", "You brand list Not Changed!", "error");
     // }
     const notify = () => {
-        swal("Good job!", "You brand list changed!", "success");
+        swal("Good job!", "You Condition list changed!", "success");
     }
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export const EditCond = () => {
             cond_name: cond_name,
             cond_desc: cond_desc
         }
-        // console.log(data)
+        console.log(data)
         axios.put(`${apiProductMaster}/condition/${id}`, data)
             .then(result => {
                 if (result) {
@@ -78,15 +78,14 @@ export const EditCond = () => {
                 }
             })
             .catch(e => {
-                // history.push("/condition")
+                history.push('/condition')
                 setError(e.response.data.message)
             })
-        // history.push("/brand")
     }
     return (
         // <!-- component -->
         <div class="max-w-lg max-w-xs bg-primary shadow-2xl rounded-lg mb-5 mx-auto text-center py-12 mt-4 rounded-xl">
-            <h1 class="text-white text-center font-extrabold -mt-3  text-3xl">Edit Brand</h1>
+            <h1 class="text-white text-center font-extrabold -mt-3  text-3xl">Edit Condition</h1>
             <div class="container py-5 max-w-md mx-auto">
                 <form onSubmit={editCond}>
                     <div class="mb-4">
@@ -96,7 +95,7 @@ export const EditCond = () => {
                             class="shadow appearance-none h-16 text-lg rounded w-full 
                             py-2 px-3 text-gray-700 leading-tight 
                             focus:outline-none focus:shadow-outline"
-                            id="brandName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
+                            id="condName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
                     </div>
                     <div class="mb-4">
                         <input placeholder="name"
@@ -105,7 +104,7 @@ export const EditCond = () => {
                             class="shadow appearance-none h-16 text-lg rounded w-full 
                             py-2 px-3 text-gray-700 leading-tight 
                             focus:outline-none focus:shadow-outline"
-                            id="brandName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
+                            id="condName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
                     </div>
                     {error.text && <p>{error.text.message}</p>}
 

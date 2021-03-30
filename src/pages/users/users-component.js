@@ -10,11 +10,7 @@ export const TableUsers = props => {
                         <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                             <h3 className="uppercase font-semibold text-base text-gray-800">List Users</h3>
                         </div>
-                        <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                            <button onClick= {() => props.setShowModal(true) }
-                                className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left"
-                                type="button">Add Users</button>
-                        </div>
+                        
                     </div>
                 </div>
                 <div className="block w-full overflow-x-auto">

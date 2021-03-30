@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import convertToRupiah from '../convertToRupiah'
+
 
 const PricecardPdam = (props) => {
     return(
@@ -15,7 +17,7 @@ const PricecardPdam = (props) => {
                         <span class="float-right text-base font-semibold text-pink-700">{props.no_tagihan}</span>
                         <br/>
                         <span class="float-left text-base font-semibold text-pink-400">Bill Price</span>
-                        <span class="float-right text-base font-semibold text-pink-700">{props.harga}</span>
+                        <span class="float-right text-base font-semibold text-pink-700">{convertToRupiah(props.harga)}</span>
                         <br/>
                         <span class="float-left text-base font-semibold text-pink-400">Description</span>
                         <p class="float-right text-base font-semibold text-pink-700">{props.deskripsi}</p>

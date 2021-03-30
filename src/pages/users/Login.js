@@ -2,12 +2,33 @@ import React, { useState, Fragment } from 'react';
 import { Redirect, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { apiUserMaster, apiUserAccount } from '../../config/apiUrl'
+import { toast } from 'react-toastify'
+import swal from 'sweetalert';
+
+
+
 const Login = () => {
     const [user_email, setEmail] = useState('');
     const [user_password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     const [error, setError] = useState('');
     const history = useHistory()
+
+    toast.configure()
+    localStorage.getItem('dataUserName')
+   
+    const notify = () => {
+        swal(`Halo ${localStorage.getItem('dataUserName')}`, "Selamat Berbelanja!", "success");
+    }
+
+    const notifyErr = () => {
+
+        toast.error('Gagal Login', {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000
+        })
+    }
+
     const onChangeEmail = (e) => {
         const value = e.target.value
         setEmail(value)
@@ -47,23 +68,29 @@ const Login = () => {
                     localStorage.setItem('token', result.data.token)
                     // localStorage.setItem('dataUserPass', data.user_password)
                     localStorage.setItem('dataUserEmail', data.user_email)
-                    localStorage.setItem('dataId', result.data.users.user_id)
+                    localStorage.setItem('dataUserId', result.data.users.user_id)
+
+
                     const a = axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.token
+
                     const tokenParts = result.data.token.split('.')
                     const encodedPayload = tokenParts[1]
                     const rawPayload = atob(encodedPayload)
                     const hasiltoken = JSON.parse(rawPayload)
                     console.log(hasiltoken) // outputs 'bob'
                     console.log(result.data.token) // outputs 'bob'
+                    // dispatch(fetchAdv()) // redux adv
                     // console.log(a)
                     // setRedirect(true)
                     history.push('/home')
+                    notify()
                 }
                 else {
                     console.log(result)
+
                     localStorage.setItem('dataUserName', result.data.users.user_name)
                     localStorage.setItem('token', result.data.token)
-                    localStorage.setItem('dataUserPass', data.user_password)
+                    // localStorage.setItem('dataUserPass', data.user_password)
                     localStorage.setItem('dataUserEmail', data.user_email)
                     localStorage.setItem('dataUserId', result.data.users.user_id)
                     const a = axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.token
@@ -76,30 +103,55 @@ const Login = () => {
                     // console.log(a)
                     setRedirect(true)
                 }
+
             })
             .catch(e => {
+
                 setError(e.response.data.message)
             })
+
+
+
         // const config = {
         //     headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
         // };
+
         // const bodyParameters = {
         //    key: "value"
         // };
+
         // axios.post( 
         //   'http://192.168.100.35:3001/api/users',
         //   bodyParameters,
         //   config
         // ).then(console.log).catch(console.log);
+
+
+
     }
+
+    
     const token = localStorage.getItem('token')
     // console.log(token)
     const a = axios.defaults.headers.common['Authorization'] = 'bearer ' + token
     console.log(a)
     if (token) {
         // alert("Tidak Bisa Akses Halaman Ini. Silakan Login Dulu!");
-        return <Redirect to="/home" />
+        if (localStorage.getItem('dataUserName')== 'Admin') {
+            return <Redirect to="/admin" />
+        } else {
+            return <Redirect to="/home" />
+        }
     }
+
+    const handleKeypress = (event) => {
+        if(event.key === 'Enter'){
+          console.log('enter press here! ')
+          submitLogin()
+        }
+      }
+
+
     return (
         <Fragment>
             {
@@ -119,21 +171,21 @@ const Login = () => {
                         }
                         <span className="text-2xl font-light">Login to your account</span>
                         <div className="relative mt-4 bg-white shadow-md sm:rounded-lg text-left">
-                            <div className="h-2 bg-indigo-400 rounded-t-md"></div>
+                            <div className="h-2 bg-pink-600 rounded-t-md"></div>
                             <div className="py-6 px-8">
                                 <label className="block font-semibold">Email</label>
-                                <input type="text" placeholder="Email" className=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md" value={user_email} onChange={onChangeEmail} />
+                                <input type="text" placeholder="Email" id="myInput" className=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-pink-600 rounded-md" value={user_email} onChange={onChangeEmail} onKeyPress={handleKeypress}/>
                                 <label className="block mt-3 font-semibold">Password</label>
-                                <input type="password" placeholder="Password" className=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md" value={user_password} onChange={onChangePassword} />
+                                <input type="password" placeholder="Password" id="myInput" className=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-pink-600 rounded-md" value={user_password} onChange={onChangePassword} onKeyPress={handleKeypress}/>
                                 <div className="flex justify-between items-baseline">
-                                    <button className="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-lg" onClick={submitLogin}>Login</button>
+                                    <button className="mt-4 bg-pink-600 hover:bg-pink-500 text-white py-2 px-6 rounded-lg" id="myBtn" onClick={submitLogin}>Login</button>
                                     <a href="#" className="text-sm hover:underline">Forgot password?</a>
                                 </div>
                             </div>
                         </div>
                         <div className="text-grey-dark mt-6">
                             don't have an account? &nbsp;
-                    <a className="underline font-semibold text-blue-600" href="/daftar">
+                    <a className="underline font-semibold text-pink-600" href="/daftar">
                                 Sign Up
                     </a>.
             </div>

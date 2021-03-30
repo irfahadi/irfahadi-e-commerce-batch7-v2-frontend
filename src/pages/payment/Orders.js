@@ -4,7 +4,7 @@ import VerifyPayment from './VerifyPayment'
 import { apiPayment } from '../../config/apiUrl'
 import axios from "axios";
 import QRCode from "react-qr-code";
-import {GetBankAccount} from './api/BankAccountApi'
+import { GetBankAccount } from './api/BankAccountApi'
 
 const OrdersKw = () => {
     let [counter, setCounter] = useState(0);
@@ -17,25 +17,25 @@ const OrdersKw = () => {
     let [paid, setPaid] = useState(false)
     let [transferBank, setTransferBank] = useState(false)
     let [paymentBy, setPaymentBy] = useState('')
-    let [expired,setExpired] = useState()
+    let [expired, setExpired] = useState()
     let [token, setToken] = useState('')
     let apiToken = apiPayment + "/walletTransaction/generate-token"
 
-    let [listBank,setListBank] = useState([])
-    let [selectedBank,setSelectedBank] = useState()
+    let [listBank, setListBank] = useState([])
+    let [selectedBank, setSelectedBank] = useState()
 
-    const [data,setData] = useState({
+    const [data, setData] = useState({
         "acco_id": localStorage.getItem("dataAccountId"),
         "total_amount": 10,
         "transaction_type": "order",
-        "order_name": "order12345",
-        "payment_by":"wallet"
+        "order_name": "#",
+        "payment_by": "wallet"
     })
-    
+
 
     useEffect(async () => {
         data.bacc_id = selectedBank
-        if (loading) { 
+        if (loading) {
             if (counter > text.length - 1) {
                 setCounter(0)
                 setLoadingText("")
@@ -46,9 +46,9 @@ const OrdersKw = () => {
                     setLoadingText(loadingText + text[counter])
                     setRefresh(!refresh)
                 }, 500)
-            }  
+            }
         }
-    }, [loading, refresh, paymentBy,selectedBank])
+    }, [loading, refresh, paymentBy, selectedBank])
 
     const onHandleClickPay = async (e) => {
         switch (paymentBy) {
@@ -82,38 +82,33 @@ const OrdersKw = () => {
         }
     }
 
-    useEffect(async ()=>{
+    useEffect(async () => {
         try {
             let gotBankAccount = await GetBankAccount(data.acco_id)
             setListBank(gotBankAccount)
         } catch (error) {
             console.log(error)
         }
-    },[paymentBy])
+    }, [paymentBy])
 
-    const onChangeSelectedBank = (e) =>{
+    const onChangeSelectedBank = (e) => {
         setSelectedBank(e.target.value)
     }
 
-    const onChangePayment= (e)=>{
+    const onChangePayment = (e) => {
         setPaymentBy(e.target.value)
     }
 
+
     return (
         <>
-
-
-        <div>
-
-        </div>
-
             <div>
                 <p>{data.acco_id}</p>
                 <p>{data.wale_id}</p>
                 <p>{data.total_amount}</p>
                 <p>{data.transaction_type}</p>
                 <p>{data.order_name}</p>
-                
+
                 <select value={paymentBy} onChange={onChangePayment}>
                     <option>Select Payment Option</option>
                     <option value="wallet">Wallet</option>
@@ -122,17 +117,17 @@ const OrdersKw = () => {
                 <button className="py-2 px-4 font-extralight text-white rounded-xl bg-blue-500 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50" onClick={onHandleClickPay}>
                     Proceed to Payment
                 </button>
-                
-                {paymentBy =="transfer_bank" && listBank.length > 1 ?
-                <select value={selectedBank} onChange={onChangeSelectedBank} >
-                    <option>Select Bank</option>
-                    {
-                        listBank.map((x)=>{
-                            return <option value={x.bacc_id}>{x.bank.bank_name}</option>
-                        })
-                    }
-                </select>
-                :null
+
+                {paymentBy == "transfer_bank" && listBank.length > 1 ?
+                    <select value={selectedBank} onChange={onChangeSelectedBank} >
+                        <option>Select Bank</option>
+                        {
+                            listBank.map((x) => {
+                                return <option value={x.bacc_id}>{x.bank.bank_name}</option>
+                            })
+                        }
+                    </select>
+                    : null
                 }
 
             </div>
@@ -152,14 +147,14 @@ const OrdersKw = () => {
                             setPaid={setPaid}
                             data={data}
                         />
-                        : transferBank ? 
-                        <div className=" w-screen content-center mt-4 ml-4">
-                            {/* <QRCode value={token.toString()} /> */}
-                            <h1>Link Payment will be expired in 48 hours</h1>
-                            <a href={token}>
-                                <button className="w-2/12 h-8 bg-gray-700 text-white rounded-md">Pay</button>
-                            </a>
-                        </div>
+                        : transferBank ?
+                            <div className=" w-screen content-center mt-4 ml-4">
+                                {/* <QRCode value={token.toString()} /> */}
+                                <h1>Link Payment will be expired in 48 hours</h1>
+                                <a href={token}>
+                                    <button className="w-2/12 h-8 bg-gray-700 text-white rounded-md">Pay</button>
+                                </a>
+                            </div>
                             : paid ? <div>
                                 <h1>Pembayaran Berhasil</h1>
                             </div> : null

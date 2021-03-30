@@ -10,6 +10,9 @@ import { apiTopup } from '../../config/apiUrl'
 import VerifyPayment from '../payment/VerifyPayment'
 import {apiPayment} from '../../config/apiUrl'
 import {toast} from 'react-toastify'
+import {useHistory} from "react-router-dom"
+import convertToRupiah from './convertToRupiah'
+import {GetWallet} from '../payment/api/GetWallet'
 
 const Tabs = ({ color }) => {
   const [openTab, setOpenTab] = React.useState(1);
@@ -31,6 +34,7 @@ const Tabs = ({ color }) => {
   const [valCard,setValCard] = useState(0)
   //State for get value voucher game
   let [valCardGame,setValCardGame] = useState(0)
+  const [valAmountGame,setValAmountGame] = useState(0)
   //State for get value token PLN  
   let [valCardPln,setValCardPln] = useState(0)
   //State for get value PDAM
@@ -39,50 +43,39 @@ const Tabs = ({ color }) => {
 
   const userId = localStorage.getItem('dataAccountId')
   const [showVerifyPin,setShowVerifyPin] = useState(false)
-
+  
   const [data,setData] = useState({})
+  const history = useHistory();
 
-  // const [getWatrNumber,SetGetWatrNumber] = useState("")
+  const [wallet,setWallet] = useState([])
+  
+  const routeSummaryPulsa = () => {
+    let path = `/summaryPulsa`
+    
+    
+    history.push(path)
+  }
 
-  // const [dataPulsa,setDataPulsa] = useState({
-    // "acco_id": userId,
-    // "total_amount": valCard ,
-    // "transaction_type": "billing",
-    // "vendor": "TELKOMSEL",
-    // "payment_by":"wallet"
-  // })
+  const routeSummaryInternet = () => {
+    let path = `/summaryInternet`
+    history.push(path)
+  }
 
-  // const [dataInternet,setDataInternet] = useState({
-  //   "acco_id": userId,
-  //   "total_amount": internetAmount,
-  //   "transaction_type": "billing",
-  //   "vendor": "TELKOM",
-  //   "payment_by":"wallet"
-  // })
+  const routeSummaryGame = () => {
+    let path = `/summaryGame`
+    history.push(path)
+  }
 
-  // const [dataVoucherGame,setDataVoucherGame] = useState({
-  //   "acco_id": userId,
-  //   "total_amount": valCardGame,
-  //   "transaction_type": "billing",
-  //   "vendor": gameCard,
-  //   "payment_by":"wallet"
-  // })
+  const routeSummaryPLN = () => {
+    let path = `/summaryPLN`
+    history.push(path)
+  }
 
-  // const [dataPLN,setDataPLN] = useState({
-  //   "acco_id": userId,
-  //   "total_amount": valCardPln,
-  //   "transaction_type": "billing",
-  //   "vendor": "PLN",
-  //   "payment_by":"wallet"
-  // })
+  const routeSummaryPDAM = () => {
+    let path = `/summaryPDAM`
+    history.push(path)
+  }
 
-  // const [dataPDAM,setDataPDAM] = useState({
-  //   "acco_id": userId,
-  //   "total_amount": pdamAmount,
-  //   "transaction_type": "billing",
-  //   "vendor": "PDAM",
-  //   "payment_by":"wallet"
-  // })
   toast.configure()
   const notify = () => {
        
@@ -96,12 +89,14 @@ const Tabs = ({ color }) => {
     fetchPulsa()
     //fetchBill()
     // fetchVGame()
+    fetchWallet()
   }, [flag === true])
 
 
   useEffect(() => {
     console.log('usereffect : ' + gameCard);
     fetchVGame()
+    
   }, [gameCard])
 
 
@@ -189,12 +184,12 @@ const Tabs = ({ color }) => {
   const addPulsa = async () =>{
 
     addWatrNumberPulsa()
-    
     // setTimeout(()=>{})
     // addBillPulsa();
     notify()
     setPhoneNumber("")
     console.log('Succes Input Data');
+    
   }
 
 
@@ -207,6 +202,7 @@ const Tabs = ({ color }) => {
     console.log('this is Amount : '+internetAmount);
     // addBillInternet()
     addWatrNumberInternet()
+    
     notify()
     setInternet("")
 
@@ -214,7 +210,9 @@ const Tabs = ({ color }) => {
 
   const addVouchergame = () => {
     addWatrNumberGame()
+    // routeSummaryGame()
     console.log(gameCard);
+    console.log(valAmountGame);
     notify()
     console.log('--Input data success--');
   }
@@ -228,6 +226,7 @@ const Tabs = ({ color }) => {
 
   const addPDAM = ()=>{
     addWatrNumberPDAM()
+    
     notify()
     setPdam("")
     console.log('--Input data success--');
@@ -248,7 +247,14 @@ const Tabs = ({ color }) => {
   }
 
 
-
+  const fetchWallet = async () =>{
+    try {
+      let walletData = await GetWallet(userId)
+      setWallet(walletData)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const fetchBill = async () => {
     return await axios({
@@ -328,11 +334,13 @@ const Tabs = ({ color }) => {
       transaction_type: transaction_type,
       vendor: vendor,
       payment_by: payment_by,
-      pin_number : pin_number
+      pin_number : pin_number,
+      order_name:null
     };
-
+    console.log(data);
     axios.post(`${apiPayment}/walletTransaction`, data).
     then((result)=>{
+      console.log(result)
       console.log(result.data);
       addBillPulsa(result.data.watr_numbers)
       
@@ -357,7 +365,8 @@ const Tabs = ({ color }) => {
     transaction_type: transaction_type,
     vendor: vendor,
     payment_by: payment_by,
-    pin_number : pin_number
+    pin_number : pin_number,
+    order_name:null
   };
 
   axios.post(`${apiPayment}/walletTransaction`, data).
@@ -386,7 +395,8 @@ const data = {
   transaction_type: transaction_type,
   vendor: vendor,
   payment_by: payment_by,
-  pin_number : pin_number
+  pin_number : pin_number,
+  order_name:null
 };
 
 axios.post(`${apiPayment}/walletTransaction`, data).
@@ -415,7 +425,8 @@ const data = {
   transaction_type: transaction_type,
   vendor: vendor,
   payment_by: payment_by,
-  pin_number : pin_number
+  pin_number : pin_number,
+  order_name:null
 };
 
 axios.post(`${apiPayment}/walletTransaction`, data).
@@ -444,7 +455,8 @@ const data = {
   transaction_type: transaction_type,
   vendor: vendor,
   payment_by: payment_by,
-  pin_number : pin_number
+  pin_number : pin_number,
+  order_name:null
 };
 
 axios.post(`${apiPayment}/walletTransaction`, data).
@@ -490,6 +502,10 @@ then((result)=>{
     axios.post(`${apiTopup}/billTopup/insertbillTopup`, data).
     then((result)=>{
       console.log(result.data);
+      // setBitoId(result.data.bito_id);
+      console.log(result.data.bito_id);
+      window.localStorage.setItem('bitoId',result.data.bito_id)
+      routeSummaryPulsa()
     }).
       catch((err) => {
         console.log(err);
@@ -522,6 +538,8 @@ then((result)=>{
     axios.post(`${apiTopup}/billTopup/insertbillTopup`, data).
     then((result)=>{
       console.log(result.data);
+      window.localStorage.setItem('bitoId',result.data.bito_id)
+      routeSummaryInternet()
     }).
       catch((err) => {
         console.log(err);
@@ -533,9 +551,9 @@ then((result)=>{
     let bito_created_on = date  
     let bito_type = "Topup"
     let bito_amount = valCardGame
-    let bito_desc = "Pembelian Pulsa"
+    let bito_desc = "Pembelian Voucher Game"
     let bito_watr_numbers = watrnumber
-    let bito_token = gameCard
+    let bito_token = valAmountGame
     let bito_vendor_name = gameCard
     let bito_acco_id = userId
 
@@ -555,6 +573,8 @@ then((result)=>{
     axios.post(`${apiTopup}/billTopup/insertbillTopup`, data).
     then((result)=>{
       console.log(result.data);
+      window.localStorage.setItem('bitoId',result.data.bito_id)
+      routeSummaryGame()
     }).
       catch((err) => {
         console.log(err);
@@ -572,13 +592,6 @@ then((result)=>{
     let bito_vendor_name = "PLN"
     let bito_acco_id = userId
 
-    setData({
-      "acco_id": bito_acco_id,
-      "total_amount": bito_amount ,
-      "transaction_type": "billing",
-      "vendor": bito_vendor_name,
-      "payment_by":"wallet"
-    })
     const data = {
       bito_created_on: bito_created_on,
       bito_type: bito_type,
@@ -594,6 +607,8 @@ then((result)=>{
     axios.post(`${apiTopup}/billTopup/insertbillTopup`, data).
     then((result)=>{
       console.log(result.data);
+      window.localStorage.setItem('bitoId',result.data.bito_id)
+      routeSummaryPLN()
     }).
       catch((err) => {
         console.log(err);
@@ -633,6 +648,8 @@ then((result)=>{
     axios.post(`${apiTopup}/billTopup/insertbillTopup`, data).
     then((result)=>{
       console.log(result.data);
+      window.localStorage.setItem('bitoId',result.data.bito_id)
+      routeSummaryPDAM()
     }).
       catch((err) => {
         console.log(err);
@@ -651,6 +668,23 @@ then((result)=>{
       
       <div className="flex flex-wrap">
         <div className="w-full">
+        <div className="font-sans ml-2 w-4/12 mt-2 h-36 bg-pink-100 border-2 border-primary flex-wrap shadow-lg rounded-lg text-white font-light pl-2">
+          <div class="p-4">
+            <span class="fas fa-wallet text-pink-500 text-xl"/>
+            <span class="ml-2 font-semibold text-xl text-pink-500">My Wallet</span>
+            <hr className="mt-1 border-b-2 border-table"/>
+            <span class="float-left text-base font-semibold text-pink-400">ID Account</span>
+            <span class="float-right text-base font-semibold text-pink-700">{wallet[0]?.wale_acco_id}</span>
+            <br/>
+            <span class="float-left text-base font-semibold text-pink-400">ID Wallet</span>
+            <span class="float-right text-base font-semibold text-pink-700">{wallet[0]?.wale_id}</span>
+            <br/>
+            <span class="float-left text-base font-semibold text-pink-400">Balance</span>
+            <span class="float-right text-base font-semibold text-pink-700">{convertToRupiah(wallet[0]?.wale_saldo)}</span>
+            <br/>
+          </div>
+          
+        </div>
           <ul
             className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
             role="tablist"
@@ -755,6 +789,7 @@ then((result)=>{
 
 
           </ul>
+          
           <div className="relative flex flex-col min-w-0 break-words bg-table w-full mb-6 shadow-lg rounded">
             <div className="px-4 py-5 flex-auto">
               <div className="tab-content tab-space">
@@ -921,10 +956,12 @@ then((result)=>{
                   {
                       vGame.vendor_rules && vGame.vendor_rules.map((x) => {
                         const onClickValGame = (e) =>{
-                          
+                          const amountGame = x.veru_bill_amount
                           const value = e.target.value = x.veru_bill_price
                           console.log(value);
-                          setValCardGame(value) 
+                          setValCardGame(value)
+                          setValAmountGame(amountGame)
+                           
                       }
                         return (
                           <>

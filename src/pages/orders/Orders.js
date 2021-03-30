@@ -61,14 +61,14 @@ export default function CartOrders() {
     payment_by: "wallet",
   });
   let [watrNumber, setWatrNumber] = useState();
-  
+
   toast.configure();
   const notifyLogin = () => {
     toast.error("Jangan Bandel Harap Login Dulu ", {
       position: toast.POSITION.TOP_CENTER,
       autoClose: 2000,
     });
-  }
+  };
 
   const token = localStorage.getItem("token");
   // console.log(token)
@@ -80,7 +80,6 @@ export default function CartOrders() {
     notifyLogin();
     history.push("/login");
   }
-
 
   useEffect(() => {
     fetchCartOrders();
@@ -298,6 +297,10 @@ export default function CartOrders() {
 
   useEffect(() => {}, [selectedEkspedisi]);
 
+  const onToDetail = ()=>{
+    history.push('/checkout-myorders')
+  } 
+
   return (
     <>
       {loading ? (
@@ -333,8 +336,7 @@ export default function CartOrders() {
               <div>
                 {Add} {addrOptional} {kec}-{kec} {city} - {prov} {kpos}
               </div>
-              <div class=" focus:outline-none bg-none mr-2 text-black py-2 px-4 border-none border-blue-400 rounded-lg"> 
-              </div>
+              <div class=" focus:outline-none bg-none mr-2 text-black py-2 px-4 border-none border-blue-400 rounded-lg"></div>
             </div>
           </div>
 
@@ -358,7 +360,7 @@ export default function CartOrders() {
                     <div class="flex flex-wrap md:w-6/12 md:mt-1 px-5 font-normal md:font-light text-left font-sans-serif">
                       <img
                         class="h-20 w-20 "
-                        src={x.product.product_images[0].prim_filename}
+                        src={x.product.product_images[0].prim_path}
                       />
                       <label class="p-5">{x.product.prod_name} </label>
                     </div>
@@ -375,6 +377,12 @@ export default function CartOrders() {
                 ))
               : null}
           </div>
+          <button
+            class=" border-2 border-pink-400 hover:bg-pink-600 focus:outline-none cursor-pointer text-black transition duration-200 font-sans-serif py-2 px-4 rounded-lg"
+            onClick={onToDetail}
+          >
+            <span class="fas fa-truck"> Check Status Pengiriman</span>
+          </button>
         </div>
       )}
     </>

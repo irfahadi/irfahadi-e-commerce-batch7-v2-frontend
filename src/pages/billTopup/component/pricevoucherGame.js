@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import convertToRupiah from '../convertToRupiah'
+
 
 const Pricevouchergame = (props) => {
 
@@ -16,7 +18,7 @@ const Pricevouchergame = (props) => {
                 <span class="flex justify-center text-xs">{'Bayar : '+props.harga}</span>
         </div> */}
                 <span class="flex justify-center text-md font-semibold text-pink-600">{props.nominal}</span>
-                <span class="flex justify-center text-xs font-medium text-pink-700">{'Bayar : '+props.harga}</span>
+                <span class="flex justify-center text-xs font-medium text-pink-700">{'Bayar : '+convertToRupiah(props.harga)}</span>
         </>
     )
 }

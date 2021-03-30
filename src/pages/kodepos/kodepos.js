@@ -31,6 +31,15 @@ export default class Kodepos extends Component {
 
     }
 
+    onRefreshTable =()=>{
+        this.refresh()
+        this.showListKodepos();
+        this.showListKecamatan();
+        console.log('table kodepos-kecamatan direfresh')
+
+    }
+
+
 
 
     // 2.panggil listKodepos dari api-Kodepos, kemudian isi Kodepos[] state dengan data dari listKodepos
@@ -78,21 +87,15 @@ export default class Kodepos extends Component {
 
     onDeleteRow = (value)=>{
         deleteKodepos(value).then(response => {
-            // console.log(response);
-
+            console.log(response);
+            this.onRefreshTable();
         }).catch(function (error) {
             console.log(error);
         });;
 
-        this.onRefreshTable();
     }
 
-    onRefreshTable =()=>{
-        this.refresh()
-        this.showListKodepos();
-        
-    }
-
+    
 
 
 
@@ -107,7 +110,7 @@ export default class Kodepos extends Component {
                         setShowModal = {this.onShowModal}
                         setDelete = {this.onDeleteRow}
                         setEdit = {this.onEditRow}
-                            
+                        setRefreshTable = {this.onRefreshTable}
                     ></TableKodepos>
                     {
                         (isModalShow ? (

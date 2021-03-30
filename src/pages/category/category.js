@@ -5,7 +5,7 @@ import React, { useState, useEffect, Alert } from 'react';
 import { useHistory } from "react-router";
 import swal from "sweetalert";
 import { toast } from "react-toastify";
-import _ from "lodash"
+// import _ from "lodash"
 import ReactPaginate from "react-paginate";
 import Pagination from "../../components/pagination/pagination";
 
@@ -31,9 +31,9 @@ function Category(props) {
 
     // page
 
-    const onClickEditCate = (id) => {
+    const onClickEditCate = (cate_id) => {
         history.push('/editCate')
-        localStorage.setItem('id', id)
+        localStorage.setItem('cate_id', cate_id)
     }
 
 
@@ -71,14 +71,14 @@ function Category(props) {
         getListCate();
     }, [])
 
-    const deleteCate = async (id) => {
+    const deleteCate = async (cate_id) => {
         if (window.confirm('Are you sure?')) {
 
             const data = {
                 cate_name: cate_name,
                 // cate_cateId: cate_cateId
             }
-            axios.delete(`${apiProductMaster}/category/${id}`)
+            axios.delete(`${apiProductMaster}/category/${cate_id}`)
                 .then((data) => {
                     notify()
                     console.log(data)
@@ -126,12 +126,7 @@ function Category(props) {
 
     return (
         <>
-            <div class="container gap-8 justify-center  flex flex-row flex-wrap   text-2xl uppercase rounded ">
-                <Link to="/productSaya" class="w-50 bg-primary text-white font-bold  tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-pink-600 shadow-md py-2 px-6 inline-flex items-center">Product</Link>
-                <Link to="/brand" class="w-50 bg-primary text-white font-bold tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-pink-600 shadow-md py-2 px-6 inline-flex items-center">Brand</Link>
-                <Link to="/category" class="w-50 bg-primary text-white font-bold   tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-pink-600 shadow-md py-2 px-6 inline-flex items-center">Category</Link>
-                <Link to="/condition" class="w-50 bg-primary text-white font-bold tracking-wide text-white  rounded  hover:border-item-600 hover:bg-white hover:text-pink-600 shadow-md py-2 px-6 inline-flex items-center">Condition</Link>
-            </div>
+           
 
             <body class="antialiased font-sans mt-4 ">
                 <div class="container mx-auto px-4 sm:px-8">
@@ -221,17 +216,18 @@ function Category(props) {
                                                         }
                                                     })
                                                     .map((cate, index) => {
+                                                        console.log(cate)
                                                         return (
-                                                            <tr key={cate.id} >
+                                                            <tr key={cate.cate_id} >
                                                                 <td className="text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2  my-2 uppercase ">{cate.cate_name}</td>
                                                                 <td className="text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2  my-2 uppercase ">{cate.cate_cate_id}</td>
-                                                                <td className="text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2  my-2 uppercase">
-                                                                    <img class="h-30 w-30" src={categoryImg} />
+                                                                <td className=" flex flex-wrap justify-center text-center md:text-xl sm:text-lg lg:text-2xl text-black border-2">
+                                                                    <img class="bg-center h-20 w-20 my-2 " src={cate.category_image.caim_path} />
                                                                 </td>
                                                                 <td className="border-2">
                                                                     <div class="flex justify-center  ">
                                                                         <button
-                                                                            onClick={() => onClickEditCate(cate.id)}
+                                                                            onClick={() => onClickEditCate(cate.cate_id)}
                                                                             class="bg-green-200 hover:bg-green-500 text-green-dark uppercase hover:text-white my-2 py-2 px-4 border border-green 
                                                                             hover:border-transparent rounded mr-2 "
                                                                             type="button">

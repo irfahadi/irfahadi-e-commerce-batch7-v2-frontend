@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 
 export default function CartOrders() {
   let history = useHistory();
-  const [CartOrders, setCartOrders] = useState([]);
+  const [CartOrders, setCartOrders] = useState({});
   const [accId, setaccId] = useState(localStorage.getItem("dataAccountId"));
   const [accIdProd, setaccIdProd] = useState([]);
   const [accIdSeller, setaccIdSeller] = useState([]);
@@ -48,22 +48,6 @@ export default function CartOrders() {
   let subTotalPajak = SubTotal + SubTotal * (10 / 100);
   let [less, setLess] = useState();
   let [dataEkspedisi, setdataEkspedisi] = useState();
-  let [counter, setCounter] = useState(0);
-  let text = " . . . . . . . .".split("");
-  let [loadingText, setLoadingText] = useState(text[0]);
-  let [refresh, setRefresh] = useState(false);
-  let [showVerifyPin, setShowVerifyPin] = useState(false);
-  let [loading, setLoading] = useState(false);
-  let [verified, setVerified] = useState(null);
-  let [paid, setPaid] = useState(false);
-  let [data, setData] = useState({
-    acco_id: accId,
-    total_amount: 0,
-    transaction_type: "order",
-    order_name: "#",
-    payment_by: "wallet",
-  });
-  let [watrNumber, setWatrNumber] = useState();
 
   toast.configure();
   const notify = () => {
@@ -95,12 +79,14 @@ export default function CartOrders() {
   }
 
   useEffect(() => {
-    fetchCartOrders();
-    fetchAddress();
-    fetchExpedition();
-    fetchCitySeller();
-    console.log(accId);
-    console.log(SubTotal);
+    try {
+      fetchCartOrders();
+      fetchAddress();
+      fetchExpedition();
+      fetchCitySeller();
+    } catch (error) {
+      console.log(error)
+    }
   }, []);
 
   useEffect(() => {
@@ -140,25 +126,6 @@ export default function CartOrders() {
     data.total_amount = subTotalPajak + Number(ongkir);
     settotalOrder(subTotalPajak + Number(ongkir));
   }, [ongkir]);
-
-  useEffect(() => {
-    // console.log(counter);
-    if (loading) {
-      if (counter > text.length - 1) {
-        setCounter(0);
-        setLoadingText("");
-        setRefresh(!refresh);
-      } else {
-        setCounter(counter + 1);
-        setTimeout(() => {
-          setLoadingText(loadingText + text[counter]);
-          setRefresh(!refresh);
-        }, 500);
-      }
-    } else {
-      console.log("do nothing");
-    }
-  }, [loading, refresh]);
 
   const fetchCartOrders = async () => {
     return await axios({
@@ -255,7 +222,7 @@ export default function CartOrders() {
       notify();
     } else {
       setLess(false);
-      notifyErr();
+      notify();
     }
   }
 
@@ -265,7 +232,6 @@ export default function CartOrders() {
     } else if (ongkir === 0) {
       notifyErrEks();
     } else {
-      setShowVerifyPin(true);
       console.log("oncreateorder");
       let orders = {
         order_subtotal: SubTotal,
@@ -279,13 +245,16 @@ export default function CartOrders() {
         order_line_items: [],
         // ongkir : ongkir,
       };
-      CartOrders.cart_line_items.map((x) =>
+      CartOrders.cart_line_items.map((x) =>{
+        x.cart_stat_name='CLOSED'
         orders.order_line_items.push(JSON.stringify(x))
-      );
-      console.log(orders);
+      });
+      // console.log(orders);
+      deleteCart(CartOrders.cart_id);
       createOrders(orders);
+      history.push('/checkout-mycart')
+
     }
-    // history.push('/orders')
   };
 
   const createOrders = async (orders) => {
@@ -300,13 +269,15 @@ export default function CartOrders() {
     }
   };
 
-  useEffect(() => {
-    console.log(watrNumber);
-    axios.put("http://localhost:3004/api/orders", {
-      order_name: data.order_name,
-      order_watr_numbers: watrNumber,
-    });
-  }, [watrNumber]);
+  const deleteCart = async (cart_id) => {
+    try {
+      let response = await axios.delete(`${apiCart}/cartLineItems/${cart_id}`)
+      .then(async()=> await axios.delete(`${apiCart}/cart/${cart_id}`));
+      return response
+    } catch (err) {
+      return await err.message;
+    }
+  };
 
   useEffect(() => {}, [selectedEkspedisi]);
 
@@ -323,27 +294,6 @@ export default function CartOrders() {
 
   return (
     <>
-      {loading ? (
-        <div className="grid w-80 mx-auto mt-10 my-2 text-center border shadow-md border-gray-300 rounded-md overflow-hidden text-black bg-gray-100">
-          <h1 className="font-bold">PROCESSING YOUR REQUEST {loadingText}</h1>
-        </div>
-      ) : showVerifyPin ? (
-        <VerifyPayment
-          wale_id={data.wale_id}
-          acco_id={data.acco_id}
-          setShowVerifyPin={setShowVerifyPin}
-          setVerified={setVerified}
-          verified={verified}
-          setLoading={setLoading}
-          setPaid={setPaid}
-          data={data}
-          setWatrNumber={setWatrNumber}
-        />
-      ) : paid ? (
-        <div>
-          <Orders />
-        </div>
-      ) : (
         <div>
           <div class="container-md mx-auto p-4 rounded-lg shadow py-4 mb-5 border-4 border-pink-600">
             <h1 class="text-red-500 text-left font-sans-serif fas fa-map-marker-alt">
@@ -387,7 +337,7 @@ export default function CartOrders() {
                     <div class="flex flex-wrap md:w-6/12 md:mt-1 px-5 font-normal md:font-light text-left font-sans-serif">
                       <img
                         class="h-20 w-20 "
-                        src={x.product.product_images[0].prim_filename}
+                        src={x.product.product_images[0].prim_path}
                       />
                       <label class="p-5">{x.product.prod_name} </label>
                     </div>
@@ -413,7 +363,7 @@ export default function CartOrders() {
               <div className="text-sm block my-1 p-2 text-black">
                 <div className="flex flex-wrap justify-between text-gray-500">
                   <button
-                    class="bg-blue-500 hover:bg-blue-800 focus:outline-none cursor-pointer text-white transition duration-200 font-sans-serif py-2 px-8 rounded-lg"
+                    class="bg-button hover:bg-green-300 focus:outline-none cursor-pointer text-white transition duration-200 font-sans-serif py-2 px-8 rounded-lg"
                     onClick={onHandleClickCodePay}
                   >
                     CodePay
@@ -460,22 +410,6 @@ export default function CartOrders() {
               <div class="mt-10 py-3 border-t border-gray-300">
                 <div class="flex flex-col-2">
                   <h1 class="m-2">Ekspedisi</h1>
-                  {/* <button className="border-current hover:border-yellow-500 hover:text-yellow-500 focus:outline-none  text-black font-sans-serif py-2 px-4 ml-4 border rounded-lg w-40">
-                JNE
-              </button>
-              <button class="border-current hover:border-yellow-500 hover:text-yellow-500 focus:outline-none  text-black font-sans-serif py-2 px-4 ml-4 border rounded-lg w-40">
-                JNT
-              </button>
-              <button class="border-current hover:border-yellow-500 hover:text-yellow-500 focus:outline-none  text-black font-sans-serif py-2 px-4 ml-4 border rounded-lg w-40">
-                SICEPAT
-              </button> */}
-
-                  {/* <select class="text-black font-sans-serif py-2 px-4 ml-4 border border-gray-600 outline-none w-100">
-                <option>===Pilih Jasa Kirim===</option>
-                <option>JNE</option>
-                <option>JNT</option>
-                <option>SICEPAT</option>
-              </select> */}
                   <Ekspedisi
                     dataEkspedisi={dataEkspedisi}
                     selectedEkspedisi={selectedEkspedisi}
@@ -494,23 +428,12 @@ export default function CartOrders() {
                     Subtotal + Pajak (10%) : Rp.
                     {numberWithCommas(subTotalPajak)}
                   </div>
-                  {/* <div class="text-center mr-6 px-4 py-2 -my-10">
-                    Pajak 10% : Rp.{" "}
-                    {numberWithCommas()}
-                  </div>
-                   */}
                   <div class="text-center mr-6 px-4 py-2 m-2">
                     Total Ongkos Kirim : Rp.{numberWithCommas(ongkir)}
                   </div>
                   <div class="text-center mr-6 px-4 py-2 m-2">
                     Total Pembayaran : Rp.{numberWithCommas(totalOrder)}
                   </div>
-
-                  {/* <div>Saldo CodePay : Rp. {numberWithCommas(saldo)}</div> */}
-
-                  {/* {less ? <div>Saldo Kurang </div> : null} */}
-
-                  {/* { less ? saldo <=   */}
                   <button
                     class=" border-2 border-pink-400 hover:bg-pink-600 focus:outline-none cursor-pointer text-black transition duration-200 font-sans-serif py-2 px-4 rounded-lg"
                     onClick={onCreateOrder}
@@ -523,7 +446,6 @@ export default function CartOrders() {
             </div>
           </div>
         </div>
-      )}
     </>
   );
 }

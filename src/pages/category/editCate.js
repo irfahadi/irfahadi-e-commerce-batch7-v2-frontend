@@ -5,34 +5,47 @@ import axios from "axios";
 import swal from 'sweetalert';
 
 export const EditCate = () => {
-    const [condition, setCondition] = useState([]);
-    const [cond_name, setCondName] = useState('');
-    const [cond_desc, setCondDesc] = useState('');
+    const [category, setCategory] = useState([]);
+    const [cate_name, setCateName] = useState('');
+    const [cate_cateId, setCateId] = useState('');
+    const [image, setImage] = useState('');
     const [error, setError] = useState('');
     const [alert, setAlert] = useState('');
-    const id = localStorage.getItem('id')
+    const id = localStorage.getItem('cate_id')
     let history = useHistory()
 
     // console.log(id)
-    const OnChangeCondName = e => {
+    const OnChangeCateName = e => {
         const value = e.target.value
-        setCondName(value)
+        setCateName(value)
         setError('')
     }
-    const OnChangeCondDesc = e => {
+    const OnChangeCateId = e => {
         const value = e.target.value
-        setCondDesc(value)
+        setCateId(value)
         setError('')
     }
-    const GetCond = async () => {
-        // console.log(GetCond)
-        const response = await axios.get(`${apiProductMaster}/condition/${id}`)
+    useEffect(() => {
+        axios({
+            url: `${apiProductMaster}/category`,
+            method: "get",
+            headers: {
+                "Content-type": "application/json"
+            }
+        }).then((res) => setCategory(res.data))
+            .catch((err) => console.error(err));
+        // console.log(category)
+    }, [])
+
+    const GetCate = async () => {
+        // console.log(GetCate)
+        const response = await axios.get(`${apiProductMaster}/category/${id}`)
         return response.data;
 
         // console.log(response.data)
     }
-    // const notifyErr = () => {
-    //     // history.push('/condition')
+    // const notify = () => {
+    //     // history.push('/category')
     //     swal("Cancel", "You brand list Not Changed!", "error");
     // }
     const notify = () => {
@@ -40,94 +53,162 @@ export const EditCate = () => {
     }
 
     useEffect(() => {
-        const getListCond = async () => {
-            const listCond = await GetCond();
-            console.log(listCond)
+        const getListCate = async () => {
+            const listCate = await GetCate();
+            console.log(listCate)
 
-            if (listCond) {
-                setCondName(listCond.cond_name);
-                setCondDesc(listCond.cond_desc);
-                setCondition(listCond)
+            if (listCate) {
+                setCateName(listCate.cate_name);
+                setCateId(listCate.cate_cateId);
+                // setCategory(listCate)
             }
         }
-        getListCond();
+        getListCate();
     }, [])
 
-    const editCond = () => {
-        // console.log(id)
-        // e.preventDefault()
+    const changeCate = (x) => {
+        x.preventDefault()
         const data = {
-            cond_name: cond_name,
-            cond_desc: cond_desc
+            cate_name: cate_name,
+            cate_cate_id: cate_cateId,
+
+
         }
-        // console.log(data)
-        axios.put(`${apiProductMaster}/condition/${id}`, data)
-            .then(result => {
-                if (result) {
+
+        console.log(data)
+        axios.post(`${apiProductMaster}/category/${id}`, data)
+            .then(async result => {
+                if (result.data.error) {
                     console.log(result.data)
+                    // notify()
+                } else {
                     if (result.data) {
-                        setCondName('')
-                        setCondDesc('')
+                        setCateId('')
+                        setCateName('')
                         setAlert(result.data.message)
+                        history.push('/category')
                         notify()
-                        history.push('/condition')
                         setTimeout(() => {
                             setAlert('')
                         }, 2500)
+                        const cateImg = {
+                            caim_path: image,
+                            caim_cate_id: result.data.cate_id
+                        }
+
+                        console.log(cateImg)
+                        await axios.post(`${apiProductMaster}/categoryImg`, cateImg)
+                            .then(result => {
+                                if (result.cateImg.error) {
+                                    console.log(result.cateImg)
+                                    notify()
+                                } else {
+                                    if (result.cateImg) {
+                                        // setCateId('')
+                                        // setCateName('')
+                                        setAlert(result.data.message)
+                                        history.push('/category')
+                                        notify()
+                                        setTimeout(() => {
+                                            setAlert('')
+                                        }, 2500)
+
+                                    } notify()
+                                }
+                            })
+                            .catch((e) => {
+                                setError(e)
+                            })
+                        //ADD GAMBAR
                     }
+                    //  notify()
                 }
             })
-            .catch(e => {
-                // history.push("/condition")
-                setError(e.response.data.message)
+            .catch((e) => {
+                setError(e.response.message)
             })
-        // history.push("/brand")
+
     }
+
     return (
         // <!-- component -->
-        <div class="max-w-lg max-w-xs bg-primary shadow-2xl rounded-lg mb-5 mx-auto text-center py-12 mt-4 rounded-xl">
-            <h1 class="text-white text-center font-extrabold -mt-3  text-3xl">Edit Brand</h1>
-            <div class="container py-5 max-w-md mx-auto">
-                <form onSubmit={editCond}>
-                    <div class="mb-4">
-                        <input placeholder="name"
-                            value={cond_name}
-                            onChange={OnChangeCondName}
-                            class="shadow appearance-none h-16 text-lg rounded w-full 
-                            py-2 px-3 text-gray-700 leading-tight 
-                            focus:outline-none focus:shadow-outline"
-                            id="brandName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
+        <div class=" flex flex-col items-center justify-center my-10 ">
+            <div class="flex flex-col bg-primary shadow-md  px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
+                <div class="font-medium self-center text-4xl sm:text-3xl uppercase text-white">Insert Category</div>
+                <div class="relative mt-7 h-px bg-gray-300">
+                    <div class="absolute left-0 top-0 flex justify-center w-full -mt-2">
+                        <span class="bg-white px-4 text-xs text-gray-500 uppercase"></span>
                     </div>
-                    <div class="mb-4">
-                        <input placeholder="name"
-                            value={cond_desc}
-                            onChange={OnChangeCondDesc}
-                            class="shadow appearance-none h-16 text-lg rounded w-full 
-                            py-2 px-3 text-gray-700 leading-tight 
-                            focus:outline-none focus:shadow-outline"
-                            id="brandName" type="text" ref={({ minLength: { value: 2, message: "Too Short" } })} />
-                    </div>
-                    {error.text && <p>{error.text.message}</p>}
+                </div>
+                <div class="mt-6 mx-4">
+                    <form action="#"
+                        onSubmit={changeCate}
+                    >
+                        <div class="flex flex-col mb-6">
+                            <label for="name" class=" text-xl sm:text-lg tracking-wide text-white text-semibold mb-2">Category Name</label>
+                            <div class="relative">
 
-                    <div class="flex items-center justify-end gap-2">
-                        <Link
-                            onClick={editCond}
-                            value="editcond"
+                                <input id="name" type="name" name="name"
+                                    value={cate_name}
+                                    onChange={OnChangeCateName}
+                                    class="text-md sm:text-base placeholder-gray-400 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Category Name" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col mb-6">
+                            <label for="name" class=" text-xl sm:text-lg tracking-wide text-white text-semibold mb-2">Category By Id</label>
 
-                            class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in"
-                        >
-                            Submit
-                  </Link>
-                        <Link class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in"
-                            type="button" to="/condition">
+                            <div class="relative">
+                                <div>
+                                    <select class="block w-52 text-gray-700 py-2 px-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 mb-2"
+                                        name="kategori"
+                                        value={cate_cateId}
+                                        onChange={OnChangeCateId}
+                                        >                                     
+                                        <option value="oke">
+                                            pilih kategori
+                                        </option>
+                                        {
+                                            category.map((y) => {
+                                                return (
+                                                    <option
+                                                        value={y.cate_id}>{y.cate_name}
 
-                            Cancel
-                        </Link>
+                                                    </option>)
 
-                    </div>
-                </form>
-            </div>
-        </div>
+                                            })}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="flex flex-col mb-6">
+                            <label for="name" class=" text-xl sm:text-lg tracking-wide text-white text-semibold mb-2">Category Images</label>
+                            <div class="relative">
+
+                                <input id="file" type="file" name="file"
+                                    // value={cate_cate_id}
+                                    // onChange={uploadImage} 
+                                    class="text-md sm:text-base placeholder-gray-400 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Name Brand" />
+                            </div>
+                        </div>
+                        <div class="flex w-full gap-4">
+
+                            <Link
+                                // onClick={insertCate}
+                                type="submit" class="flex items-center justify-center focus:outline-none bg-white  text-black text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in">
+
+                                Save
+                    </Link>
+                            <Link to="/category" type="submit" class="flex items-center justify-center focus:outline-none text-black bg-white text-md sm:text-base bg-button hover:bg-red-300 hover:text-black rounded py-2 w-full transition duration-150 ease-in">
+
+                                Cancel
+                    </Link>
+                        </div>
+                    </form>
+                </div>
+
+            </div >
+        </div >
 
     )
 }
