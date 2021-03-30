@@ -44,10 +44,10 @@ export default function OrderDikirimModal({
                                         Order Name
                                             </th>
                                             <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nama Produk
+                                        Product Name
                                             </th>
                                             <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Gambar
+                                        Picture
                                             </th>
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Created On

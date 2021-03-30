@@ -323,7 +323,7 @@ function Index() {
                                         Order Name
                                             </th>
                                             <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nama Pembeli
+                                        Buyer
                                             </th>
                                     <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Created On
@@ -362,7 +362,7 @@ function Index() {
                                             filter===false ? (OrderShipping.filter((val)=>{
                                                     if(search == ""){
                                                         return val
-                                                    } else if (val.order_name.toLowerCase().includes(search.toLocaleLowerCase())){
+                                                    } else if (val.order_name.toLowerCase().includes(search)){
                                                         return val
                                                     } 
                                                 }).filter((x)=> x.order_stat_name !== "CHECKOUT" && x.order_stat_name !== "CANCELLED" && x.order_acco_id_seller == localStorage.getItem('dataAccountId')).map((x)=>{
